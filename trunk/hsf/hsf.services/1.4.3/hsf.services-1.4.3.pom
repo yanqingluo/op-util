@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>hsf-all</artifactId>
+		<groupId>com.taobao.hsf</groupId>
+		<version>1.4.3</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>${services.aid}</artifactId>
+	<version>${services.version}</version>
+	<name>${services.name}</name>
+	<packaging>jar</packaging>
+	<build>
+		<plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src/main/META-INF</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>META-INF</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.taobao.remoting</groupId>
+			<artifactId>network.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>junit</groupId>
+		  <artifactId>junit</artifactId>
+		  <scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>com.taobao.top</groupId>
+  <artifactId>top-turbo</artifactId>
+  <versioning>
+    <latest>1.0.5-SNAPSHOT</latest>
+    <release></release>
+    <versions>
+      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.2-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
+      <version>1.0.5.SNAPSHOT</version>
+      <version>1.0.5-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20100824073931</lastUpdated>
+  </versioning>
+</metadata>

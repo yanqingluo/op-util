@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<project>
+	<parent>
+		<artifactId>config-server-all</artifactId>
+		<groupId>com.taobao.configserver</groupId>
+		<version>1.3.1</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>${config-common.aid}</artifactId>
+	<name>${config-common.name}</name>
+	<version>${config-common.version}</version>
+	<dependencies>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+</project>

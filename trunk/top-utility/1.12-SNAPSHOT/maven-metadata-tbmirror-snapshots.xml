@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.taobao.top</groupId>
+  <artifactId>top-utility</artifactId>
+  <version>1.12-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20100526.073922</timestamp>
+      <buildNumber>2</buildNumber>
+    </snapshot>
+    <lastUpdated>20100911100914</lastUpdated>
+  </versioning>
+</metadata>
