@@ -1,0 +1,6 @@
+true
+^=]=!={=@=*=(=%=)=-=+=<=&=>=.=}='=[=:=~=$
+{"tid":"24007427010707","fields":"tid,seller_nick,buyer_nick,orders"}
+^=]=!={=@=*=(=%=)=-=+=<=&=>=.=}='=[=:=~=$
+{"trade":{"buyer_nick":"tbtest1064","orders":{"order":[{"adjust_fee":"0.00","buyer_rate":false,"cid":50010815,"discount_fee":"0.00","iid":"1603929937","is_oversold":false,"num":1,"num_iid":1603929937,"oid":24007427010707,"payment":"20.00","pic_path":"http://img04.daily.taobao.net/bao/uploaded/i4/T1fFBcXm8aXXbReuYX_115054.jpg","price":"20.00","refund_status":"NO_REFUND","seller_rate":false,"seller_type":"C","snapshot_url":"T1KVBcXfdaXXcfLFU5.1290589071081_snap","status":"WAIT_BUYER_PAY","title":"TOUS淘气小熊香水","total_fee":"20.00"}]},"seller_nick":"ruoping1007","tid":24007427010707}}
+^=]=!={=@=*=(=%=)=-=+=<=&=>=.=}='=[=:=~=$

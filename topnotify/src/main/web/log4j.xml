@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="project" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/top-notify.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{1}] - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="richclient" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/richclient.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{1}] - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="alert" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/top-alert.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	
+	<appender name="runTimeMessageLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/runTimeMessageLog.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	<appender name="runTimeNotifyLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/runTimeNotifyLog.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	<appender name="topNotifyExceptionLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.notify.logging.dir}/topNotifyExceptionLog.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.taobao.monitor.alert.client.nagios.NagiosSender" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="alert" />
+	</logger>
+
+	<logger name="com.taobao.top.tim.client" additivity="false">
+		<level value="info" />
+		<appender-ref ref="richclient" />
+	</logger>
+	
+	<logger name="com.taobao.top.notify.log.RunTimeMessageLog" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="runTimeMessageLog" />
+	</logger>
+	
+	<logger name="com.taobao.top.notify.log.RunTimeNotifyLog" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="runTimeNotifyLog" />
+	</logger>
+	
+	<logger name="com.taobao.top.notify.log.TopNotifyExceptionLog" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="topNotifyExceptionLog" />
+	</logger>
+
+	<category name="com.taobao.common.tair">
+		<priority value="info" />
+	</category>
+
+	<root>
+		<priority value="${top.notify.logging.level}" />
+		<appender-ref ref="project" />
+	</root>
+</log4j:configuration>

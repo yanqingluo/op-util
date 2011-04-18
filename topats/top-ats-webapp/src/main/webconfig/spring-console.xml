@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="logPullHandler" class="com.taobao.top.console.client.analysis.LogPullHandler">
+        <constructor-arg ref="simpleLogPullHandler" />
+        <constructor-arg ref="smartLogPullHandler" />
+    </bean>
+
+    <bean id="simpleLogPullHandler" class="com.taobao.top.console.client.analysis.SimpleLogPullHandler">
+        <property name="logFile" value="${top.ats.loggingRoot}/taskLog.log" />
+        <constructor-arg ref="logPositionManager" />
+    </bean>
+
+    <bean id="logPositionManager" class="com.taobao.top.console.client.analysis.LogPositionManager">
+        <constructor-arg value="${top.ats.loggingRoot}/log-position.txt" />
+        <constructor-arg value="${top.ats.loggingRoot}/log-serialize.obj"/>
+    </bean>
+
+    <bean id="smartLogPullHandler" class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPullHandler">
+        <property name="logFile" value="${top.ats.loggingRoot}/taskLog.log" />
+        <constructor-arg ref="smartLogPositionManager" />
+    </bean>
+
+    <bean id="smartLogPositionManager" class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPositionManager">
+        <constructor-arg value="${top.ats.loggingRoot}/smart-log-position.txt" />
+    </bean>
+
+</beans>

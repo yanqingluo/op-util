@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="taobao.api.test">
+	<type>insert</type>
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="timestamp" />
+				<param name="session" />
+			</must>
+			<private></private>
+		</protocol>
+		<application template="item">
+			<must>
+				<param name="string" />
+			</must>
+			<combine>
+				<choise>
+					<together>
+						<param name="tid" type="string" />
+						<param name="v" expected="1.0" />
+					</together>
+					<together>
+						<param name="v" expected="2.0" />
+						<param name="trade_id" type="string" />
+					</together>
+				</choise>
+				<choise>
+					<together>
+						<param name="a" type="string" />
+						<param name="cid" type="string" />
+					</together>
+				</choise>
+			</combine>
+			<optional>
+				<param name="stringOptional" />
+				<param name="numberOptional" />
+			</optional>
+		</application>
+	</params>
+	<statement class="com.taobao.top.core.mock.MockedApiStatement">
+	</statement>
+</api>

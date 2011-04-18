@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="taobao.app.subapp.apply" v="1.0,2.0">
+	<hsf interface_name="com.taobao.api.mix.MixService" interface_version="1.0.0" method_name="doAppSubappApply" />
+	<type>insert</type>
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="iid" />
+				<param name="iids" />
+			</must>
+			<private />
+		</protocol>
+		<application>
+			<must>
+				<param name="parent_app_key" type="string" />
+				<param name="title" type="string" />
+				<param name="iid" type="string" />
+			</must>
+			<optional validate="true">
+				<param name="service_code" type="string" />
+				<param name="iids" type="string" />
+				<param name="logo" type="byte[]" length="102400" file_ext="gif,jpg,png" />
+			</optional>
+		</application>
+	</params>
+	<statement class="com.taobao.top.config.TaobaoShopexSubappApplyStatement" />
+</api>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="samService" class="com.taobao.hsfunit.app.spring.util.HSFSpringConsumerBean"  init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="version">
+			<value>1.1.2.daily</value>
+		</property>
+		<property name="target">
+			<value>192.168.215.131:12200?_TIMEOUT=3000</value>
+		</property>
+	</bean>
+</beans>

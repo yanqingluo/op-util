@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="DBCsource" class="com.taobao.rjdbc.tbjdbc.TBCompDataSource">
+		<property name="innerDataSource">
+			<list>
+				<ref local="DBCsource_1" />
+				<ref local="DBCsource_2" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="DBCsource_1" class="com.taobao.rjdbc.tbjdbc.TBDataSource">
+		<property name="target" ref="DBCtarget_1" />
+		<property name="dataSourceConfig" ref="dataSourceConfig" />
+		<property name="alive" value="true" />
+		<property name="dbName" value="tbdbcommon_cm2" />
+	</bean>
+
+	<bean id="DBCsource_2" class="com.taobao.rjdbc.tbjdbc.TBDataSource">
+		<property name="target" ref="DBCtarget_2" />
+		<property name="dataSourceConfig" ref="dataSourceConfig" />
+		<property name="alive" value="false" />
+		<property name="dbName" value="tbdbcommon_cm3" />
+	</bean>
+
+	<bean id="DBCtarget_1" class="com.taobao.datasource.TaobaoDataSource">
+		<property name="name" value="DBCDataSource_cm2" />
+	</bean>
+
+	<bean id="DBCtarget_2" class="com.taobao.datasource.TaobaoDataSource">
+		<property name="name" value="DBCDataSource_cm3" />
+	</bean>
+
+	<bean id="dataSourceConfig" class="com.taobao.rjdbc.config.DataSourceConfig" init-method="init">
+		<property name="appName" value="TOP" />
+		<property name="parallelRegistrar" ref="parallelRegistrar" />
+	</bean>
+
+	<bean id="dbcTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="DBCsource" />
+	</bean>
+
+	<bean id="dbcTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager" ref="dbcTransactionManager" />
+	</bean>
+
+	<bean id="sqlMapDBC" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-config.xml" />
+		<property name="dataSource" ref="DBCsource" />
+	</bean>
+
+	<bean id="dbRouteManager" class="com.taobao.common.dao.persistence.DBRouteManager">
+		<property name="dbRouteConfig" ref="dbRouteConfig" />
+	</bean>
+
+	<bean id="dbRouteConfig" class="com.taobao.common.dao.persistence.DBRouteConfig" init-method="init" singleton="true">
+		<property name="allNodeNameList">
+			<list>
+				<value>dbc</value>
+			</list>
+		</property>
+		<property name="defaultNodeNameList">
+			<list>
+				<value>dbc</value>
+			</list>
+		</property>
+		<property name="configLocation">
+			<value>classpath:sql-route.xml</value>
+		</property>
+	</bean>
+
+	<bean id="sqlDaoBaseSupport" class="com.taobao.common.dao.persistence.SqlMapBaseDAOSupport" init-method="init">
+		<property name="dbRouteManager">
+			<ref bean="dbRouteManager" />
+		</property>
+		<property name="sqlMapList">
+			<map>
+				<entry key="dbc" value-ref="sqlMapDBC" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="daoBase" class="com.taobao.common.dao.persistence.SqlMapBaseDAO">
+		<property name="sqlDaoBaseSupport" ref="sqlDaoBaseSupport" />
+	</bean>
+
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="DBCsource" />
+	</bean>
+
+	<!-- Task DAO -->
+	<bean id="taskDao" class="com.taobao.top.ats.dao.TaskDaoImpl">
+		<property name="sqlDaoBaseSupport" ref="sqlDaoBaseSupport" />
+	</bean>
+</beans>

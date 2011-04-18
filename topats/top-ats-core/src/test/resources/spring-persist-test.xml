@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- Real Data Sources -->
+	<bean id="DS_TOP_ATS" class="org.apache.commons.dbcp.BasicDataSource" init-method="createDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="${top.ats.db.url}" />
+		<property name="username" value="${top.ats.db.uid}" />
+		<property name="password" value="${top.ats.db.pwd}" />
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="-1" />
+		<property name="maxIdle" value="-1" />
+		<property name="maxWait" value="1500" />
+		<property name="maxActive" value="100" />
+		<property name="poolPreparedStatements" value="false" />
+	</bean>
+
+	<!-- iBatis Clients -->
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-config.xml" />
+		<property name="dataSource" ref="DS_TOP_ATS" />
+	</bean>
+
+	<bean id="sqlDaoBaseSupport" class="com.taobao.common.dao.persistence.SqlMapBaseDAOSupport" init-method="init">
+		<property name="dbRouteManager">
+			<ref bean="dbRouteManager" />
+		</property>
+		<property name="sqlMapList">
+			<map>
+				<entry key="dbc" value-ref="sqlMapClient" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="dbRouteManager" class="com.taobao.common.dao.persistence.DBRouteManager">
+		<property name="dbRouteConfig">
+			<ref local="dbRouteConfig" />
+		</property>
+	</bean>
+
+	<bean id="dbRouteConfig" class="com.taobao.common.dao.persistence.DBRouteConfig" init-method="init" singleton="true">
+		<property name="allNodeNameList">
+			<list>
+				<value>dbc</value>
+			</list>
+		</property>
+		<property name="defaultNodeNameList">
+			<list>
+				<value>dbc</value>
+			</list>
+		</property>
+		<property name="configLocation">
+			<value>classpath:sql-route.xml</value>
+		</property>
+	</bean>
+
+	<!-- Task DAO -->
+	<bean id="taskDao" class="com.taobao.top.ats.dao.TaskDaoImpl">
+		<property name="sqlDaoBaseSupport" ref="sqlDaoBaseSupport" />
+	</bean>
+
+</beans>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="GBK"?>
+<task name = "taobao.topats.trades.fullinfo.get">
+    <!-- 任务优先级 -->
+    <priority level="1" />
+    <!-- 子任务hsf服务配置 -->
+    <sub_task type="hsf" interface="com.taobao.api.trade.TradeService" method="doTradeFullinfoGet" version="1.0.0" />
+    <!-- 入参校验规则 -->
+    <params min_size="1" max_size="40">
+        <param name="tids" target_name="tid" enable_split="true" separator=";" target_enable_null="false" target_type="number" />
+        <param name="fields" target_name="fields" enable_split="false" target_enable_null="false" target_type="string" />
+    </params>
+    <!-- 需要重试的错误码，标记重试 -->
+    <retry_fails>isp.trade-service-unavailable,isp.remote-service-error,isp.remote-service-timeout,isp.remote-connection-error</retry_fails>
+    <!-- 返回给用户的子任务入参字段 -->
+    <send_out_requests>fields,tid</send_out_requests>
+</task>
+
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="project" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.ats.loggingRoot}/topats.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{3}:%L] - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="taskLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.ats.loggingRoot}/taskLog.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<appender name="subTaskLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.ats.loggingRoot}/subTaskLog.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.taobao.top.ats.monitor.TaskLog" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="taskLog" />
+	</logger>
+
+	<logger name="com.taobao.top.ats.monitor.SubTaskLog" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="subTaskLog" />
+	</logger>
+
+	<root>
+		<level value="${top.ats.loggingLevel}" />
+		<appender-ref ref="project" />
+	</root>
+
+</log4j:configuration>

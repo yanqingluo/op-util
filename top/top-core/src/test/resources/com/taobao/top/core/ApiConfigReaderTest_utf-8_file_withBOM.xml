@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<api name="taobao.api.test">
+	<type>insert</type>
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="timestamp" />
+				<param name="session" />
+			</must>
+			<private></private>
+		</protocol>
+		<application template="item">
+			<must>
+				<param name="string" />
+				<param name="stringLength" type="string" length="5" cn_name="我要覆盖" />
+				<param name="number" />
+				<param name="numberLength" type="number" length="5" cn_name="我也要覆盖" />
+				<param name="numberLengthMin" />
+				<param name="numberLengthMax" />
+				<param name="numberLengthMinMax" />
+				<param name="notInTheTemplate" type="number" length="10"
+					cn_name="我不在模板中" min_value="-1000" max_value="1000" default_value="500" />
+			</must>
+			<combine>
+				<choise>
+					<together>
+						<param name="v" value="1.0" />
+						<param name="tid" type="string_list" />
+					</together>
+					<together>
+						<param name="v" value="2.0" />
+						<param name="trade_id" type="string_list" />
+					</together>
+				</choise>
+				<choise>
+					<together>
+						<param name="uid" type="string" length="5" />
+						<param name="v" value="1.0" />
+					</together>
+					<together>
+						<param name="user_id" type="string" length="5" />
+						<param name="v" value="2.0" />
+					</together>
+				</choise>
+			</combine>
+			<optional>
+				<param name="stringOptional" />
+				<param name="numberOptional" />
+			</optional>
+		</application>
+	</params>
+	<statement class="com.taobao.top.core.mock.MockedApiStatement">
+	</statement>
+</api>

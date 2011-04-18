@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<import resource="classpath:tim-rich-client-config.xml" />
+
+
+	<bean id="configService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.ConfigService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.consume.version}</value>
+		</property>
+		<property name="methodSpecials">
+			<list>
+				<bean class="com.taobao.hsf.model.metadata.MethodSpecial">
+					<property name="methodName" value="getAllOnlineAppkeys" />
+					<property name="clientTimeout" value="80000" />
+				</bean>
+				<bean class="com.taobao.hsf.model.metadata.MethodSpecial">
+					<property name="methodName" value="getAllOnlineAppIds" />
+					<property name="clientTimeout" value="80000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="samServiceClient" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.consume.version}</value>
+		</property>
+	</bean>
+
+	<bean id="clientConfigBean" class="com.taobao.top.tim.client.config.ClientConfigBean">
+		<property name="localServiceEnable" value="true" />
+		<property name="localCahceEnable" value="true" />
+		<property name="whiteListServiceEnable" value="false" />
+		<property name="incSyncTaskInitialDelay" value="120" />
+		<property name="incSyncTaskPeriod" value="300" />
+		<property name="refreshBloomFilterMapSize" value="10000" />
+		<property name="localCacheSize" value="16384" />
+		<property name="localCacheInterval" value="3000" />
+		<property name="logFlushInterval" value="1000" />
+		<property name="whiteListLoadRetries" value="25" />
+	</bean>
+
+	<bean id="appkeyWhiteListSyncTask" class="com.taobao.top.tim.client.sync.AppkeyWhiteListSyncTask">
+		<property name="appkeyWhiteListService" ref="appkeyWhiteListService" />
+		<property name="clientConfigBean" ref="clientConfigBean" />
+	</bean>
+
+	<bean id="apiNameWhiteListSyncTask" class="com.taobao.top.tim.client.sync.ApiNameWhiteListSyncTask">
+		<property name="apiNameWhiteListService" ref="apiNameWhiteListService" />
+		<property name="clientConfigBean" ref="clientConfigBean" />
+	</bean>
+
+
+	<bean id="appIdWhiteListSyncTask" class="com.taobao.top.tim.client.sync.AppIdWhiteListSyncTask">
+		<property name="appIdWhiteListService" ref="appIdWhiteListService" />
+		<property name="clientConfigBean" ref="clientConfigBean" />
+	</bean>
+
+
+	<bean id="clientTairManager" class="com.taobao.common.tair.impl.DefaultTairManager"
+		init-method="init">
+		<property name="configServerList">
+			<list>
+				<value>${top.cache.common.loc}</value>
+			</list>
+		</property>
+		<property name="groupName" value="${top.cache.common.group}" />
+	</bean>
+
+</beans>

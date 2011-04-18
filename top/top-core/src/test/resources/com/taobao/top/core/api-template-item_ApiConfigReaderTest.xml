@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template name="item">
+	<param name="string" type="string" cn_name="我是字符串" default_value="stringDefault"/>
+	<param name="stringLength" type="string" length="10" cn_name="我是字符串" default_value="stringLengthDefault"/>
+	<param name="number" type="number" cn_name="我是数字" default_value="numberDefault"/>
+	<param name="numberLength" type="number" length="10" cn_name="我是数字"  default_value="numberLengthDefault"/>
+	<param name="numberLengthMin" type="number" length="10"
+		min_value="0" cn_name="我是数字" />
+	<param name="numberLengthMax" type="number" length="10"
+		max_value="1" cn_name="我是数字" />
+	<param name="numberLengthMinMax" type="number" length="10"
+		min_value="0" max_value="1" cn_name="我是数字" />
+	<param name="stringOptional" type="string" cn_name="我是可选字符串" default_value="stringOptionalDefault"/>
+	<param name="numberOptional" type="number" cn_name="我是可选数字" default_value="numberOptionalDefault"/>
+</template>

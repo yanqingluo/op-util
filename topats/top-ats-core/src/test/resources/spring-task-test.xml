@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+	<bean id="taskManager" class="com.taobao.top.ats.task.TaskManagerImpl" init-method="init">
+		<property name="apiManager" ref="apiManagerMock" />
+		<property name="apiEngine" ref="apiEngineMock" />
+		<property name="cleanerManager" ref="cleanerManager" />
+		<property name="jobDispatcher" ref="jobDispatcher" />
+		<property name="taskDao" ref="taskDaoMock" />
+		<property name="tfsManager" ref="tfsManagerMock" />
+		<property name="topMQService" ref="topMQSerivceMock" />
+		<property name="localPath" value="${top.ats.result.localPath}" />
+		<property name="remotePath" value="${top.ats.result.remotePath}" />
+		<property name="taskMonitor" ref="taskMonitor" />
+		<property name="taskExecutePeriod" value="${top.ats.task.executePeriod}" />
+		<property name="taskCleanupPeriod" value="${top.ats.task.cleanupPeriod}" />
+	</bean>
+
+	<bean id="atsJob" class="com.taobao.top.ats.task.AtsJob" singleton="false">
+		<constructor-arg ref="atsTaskDO" />
+		<constructor-arg ref="taskDaoMock" />
+		<constructor-arg ref="topMQSerivceMock" />
+		<constructor-arg ref="tfsManagerMock" />
+		<constructor-arg ref="apiEngineMock" />
+		<constructor-arg ref="apiManagerMock" />
+		<constructor-arg value="${top.ats.result.localPath}" />
+		<constructor-arg value="${top.ats.result.remotePath}" />
+		<constructor-arg ref="taskMonitor" />
+	</bean>
+
+	<bean id="atsTaskDO" class="com.taobao.top.ats.domain.AtsTaskDO">
+		<property name="id" value="123424" />
+		<property name="apiName" value="taobao.topats.trade.accountreport.get" />
+		<property name="appKey" value="4272" />
+		<property name="status" value="0" />
+	</bean>
+
+	<bean id="urlGenerator" class="com.taobao.top.ats.url.UrlGeneratorImpl">
+		<property name="secret" value="${top.ats.tokenSecret}" />
+		<property name="downloadUrlPre" value="${top.ats.downloadUrlPre}" />
+		<property name="tokenPathPre" value="${top.ats.tokenPathPre}" />
+	</bean>
+
+	<bean id="cleanerManager" class="com.taobao.top.ats.task.cleaner.CleanerManagerImpl">
+		<property name="taskDao" ref="taskDaoMock" />
+		<property name="tfsManager" ref="tfsManagerMock" />
+		<property name="tairManager" ref="tairManagerMock" />
+		<property name="urlGenerator" ref="urlGenerator" />
+		<property name="tairNamespace" value="${top.ats.tair.namespace}" />
+		<property name="tokenPathPre" value="${top.ats.tokenPathPre}" />
+		<property name="taskExpiredDays" value="${top.ats.result.expiredDays}" />
+		<property name="localPath" value="${top.ats.result.localPath}" />
+		<property name="remotePath" value="${top.ats.result.remotePath}" />
+	</bean>
+
+	<bean id="apiManagerMock" class="mock.ApiManagerMock" />
+	<bean id="taskDaoMock" class="mock.TaskDaoMock" />
+	<bean id="topMQSerivceMock" class="mock.TopMQServiceMock" />
+	<bean id="tfsManagerMock" class="mock.TfsManagerMock" />
+	<bean id="apiEngineMock" class="mock.ApiEngineMock" />
+	<bean id="tairManagerMock" class="mock.TairManagerMock" />
+	<bean id="taskMonitor" class="com.taobao.top.ats.monitor.TaskMonitorImpl" init-method="init" />
+
+	<bean id="instantJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="1" />
+		<property name="type" value="leave" />
+		<property name="value" value="${top.ats.instant.poolSize}" />
+	</bean>
+
+	<bean id="freeTimeJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="2" />
+		<property name="type" value="limit" />
+		<property name="value" value="${top.ats.freetime.poolSize}" />
+	</bean>
+
+	<bean id="normalJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="3" />
+		<property name="type" value="limit" />
+		<property name="value" value="${top.ats.normal.poolSize}" />
+	</bean>
+
+	<bean id="jobDispatcher" class="com.taobao.top.xbox.threadpool.JobDispatcher">
+		<property name="maximumPoolSize" value="${top.ats.max.poolSize}" />
+		<property name="maximumQueueSize" value="${top.ats.max.queueSize}" />
+		<property name="jobThreadWeightModel">
+			<list>
+				<ref bean="instantJobModel" />
+				<ref bean="freeTimeJobModel" />
+				<ref bean="normalJobModel" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

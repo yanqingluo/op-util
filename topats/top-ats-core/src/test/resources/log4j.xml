@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c{1}\:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="iBatis" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-4r [%t] %-5p %c %x - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="DEBUG" />
+		</filter>
+	</appender>
+
+	<appender name="taskLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="AtsTask.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="subTaskLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="SubAtsTask.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d - %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.ibatis" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="java.sql.Connection" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="java.sql.Statement" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+
+	<logger name="java.sql.PreparedStatement" additivity="true">
+		<level value="DEBUG" />
+		<appender-ref ref="iBatis" />
+	</logger>
+
+	<logger name="java.sql.ResultSet" additivity="true">
+		<level value="DEBUG" />
+		<appender-ref ref="IBatis" />
+	</logger>
+
+	<logger name="com.taobao.top.ats.monitor.TaskLog" additivity="false">
+		<level value="fatal" />
+		<appender-ref ref="taskLog" />
+	</logger>
+
+	<logger name="com.taobao.top.ats.monitor.SubTaskLog" additivity="false">
+		<level value="fatal" />
+		<appender-ref ref="subTaskLog" />
+	</logger>
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="stdout" />
+	</root>
+
+</log4j:configuration>

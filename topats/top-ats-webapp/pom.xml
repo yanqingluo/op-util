@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>${top-ats-webapp.aid}</artifactId>
+	<name>${top-ats-webapp.name}</name>
+	<packaging>war</packaging>
+	<version>${top-ats-webapp.version}</version>
+
+	<parent>
+		<groupId>com.taobao.top.ats</groupId>
+		<artifactId>top-ats</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<filters>
+			<filter>${user.home}/antx.properties</filter>
+		</filters>
+		<finalName>topats</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1-alpha-1</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/webconfig</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>${top-ats-service.aid}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>${top-ats-core.aid}</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.hsf</groupId>
+			<artifactId>hsf.app.spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+	</dependencies>
+</project>

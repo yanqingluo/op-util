@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GBK"?>
+<task name = "taobao.topats.delivery.send">
+    <!-- 任务优先级 -->
+    <priority level="0" />
+    <!-- 子任务hsf服务配置 -->
+    <sub_task type="hsf" interface="com.taobao.logistics.service.LogisticsConsignService" method="consign" version="1.0.0" />
+    <!-- 入参校验规则 -->
+    <params min_size="1" max_size="40">
+        <param name="tids" target_name="tid" enable_split="true" separator=";" target_enable_null="false" target_type="number" />
+        <param name="company_codes" target_name="company_code" enable_split="true" separator=";" target_enable_null="true" target_type="string" />
+        <param name="out_sids" target_name="out_sid" enable_split="true" separator=";" target_enable_null="true" target_type="string" />
+        <param name="order_types" target_name="order_type" enable_split="true" separator=";" target_enable_null="true" target_type="string" />
+        <param name="memos" target_name="memo" enable_split="true" separator=";" target_enable_null="true" target_type="string" />
+        <param name="seller_name" target_name="seller_name" enable_split="false" target_enable_null="true" target_type="string" />
+        <param name="seller_area_id" target_name="seller_area_id" enable_split="false" target_enable_null="true" target_type="number" />
+        <param name="seller_address" target_name="seller_address" enable_split="false" target_enable_null="true" target_type="string" />
+        <param name="seller_zip" target_name="seller_zip" enable_split="false" target_enable_null="true" target_type="string" />
+        <param name="seller_phone" target_name="seller_phone" enable_split="false" target_enable_null="true" target_type="string" />
+        <param name="seller_mobile" target_name="seller_mobile" enable_split="false" target_enable_null="true" target_type="string" />
+    </params>
+    <!-- 忽略掉的错误码，作为成功处理,b04错误码含义有问题，先不做忽略处理 -->
+    <!-- <ignore_fails>isv.logistics-delivery-service-error:B04</ignore_fails>  -->
+    <!-- 需要重试的错误码，标记重试 -->
+    <retry_fails>isp.logistics-delivery-service-unavailable,isv.logistics-delivery-service-error:S01,isp.remote-service-error,isp.remote-service-timeout,isp.remote-connection-error</retry_fails>
+    <!-- 返回给用户的子任务入参字段 -->
+    <send_out_requests>tid,company_code,out_sid,order_type,memo,seller_name,seller_area_id,seller_address,seller_zip,seller_phone,seller_mobile</send_out_requests>
+    <!-- 返回给用户的子任务响应结果（出现ignore错误的时候使用,##中间的字段从子任务请求中获取值填入）,b04错误码含义有问题，先不做忽略处理 -->
+    <!-- <send_out_results_json>{"shipping":{"is_success":true}}</send_out_results_json> -->
+    <!-- <send_out_results_xml>&lt;shipping&gt;&lt;is_success&gt;true&lt;/is_success&gt;&lt;/trade&gt;</send_out_results_xml> -->
+</task>
+
+

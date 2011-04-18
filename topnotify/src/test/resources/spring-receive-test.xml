@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="notifySubscriber" class="com.taobao.top.notify.receive.NotifySubscriber">
+		<property name="subscribeHelper" ref="subscribeHelper" />
+		<property name="bizTypes" ref="bizTypes" />
+		<property name="tradeMessages" ref="tradeMessages" />
+		<property name="refundMessages" ref="refundMessages" />
+		<property name="tradePlusMessages" ref="tradePlusMessages" />
+		<property name="itemMessages" ref="itemMessages" />
+	</bean>
+
+	<bean id="subscribeHelper" class="com.taobao.hsf.notify.extend.SubscriptionHelper">
+		<property name="notifyManager" ref="notifyManager" />
+	</bean>
+
+	<bean id="notifyManager" class="com.taobao.hsf.notify.client.NotifyManagerBean" init-method="init">
+		<property name="name" value="TOP" />
+		<property name="description" value="TOP" />
+		<property name="groupId" value="NG-S-TOP-TOPNotifySystem" />
+		<property name="messageListener" ref="notifyListener" />
+	</bean>
+
+	<bean id="notifyListener" class="com.taobao.top.notify.receive.NotifyListener">
+		<property name="itemNotifyBuilder" ref="itemNotifyBuilder" />
+		<property name="refundNotifyBuilder" ref="refundNotifyBuilder" />
+		<property name="tradeNotifyBuilder" ref="tradeNotifyBuilder" />
+		<property name="tradePlusNotifyBuilder" ref="tradePlusNotifyBuilder" />
+		<property name="bizTypes" ref="bizTypes" />
+		<property name="tradeMessages" ref="tradeMessages" />
+		<property name="refundMessages" ref="refundMessages" />
+		<property name="tradePlusMessages" ref="tradePlusMessages" />
+		<property name="itemMessages" ref="itemMessages" />
+		<property name="subscriptionManager" ref="subscriptionManager" />
+		<property name="notifyWriter" ref="notifyWriterMock" />
+		<property name="alertAgent" ref="alertAgent" />
+		<property name="sender" ref="notifySender" />
+		<property name="runTimeNotifyLogMonitor" ref="runTimeNotifyLogMonitor" />
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	
+	<bean id="itemNotifyBuilder" class="com.taobao.top.notify.receive.builder.ItemNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="refundNotifyBuilder" class="com.taobao.top.notify.receive.builder.RefundNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="tradeNotifyBuilder" class="com.taobao.top.notify.receive.builder.TradeNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="tradePlusNotifyBuilder" class="com.taobao.top.notify.receive.builder.TradePlusNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+
+	<bean id="bizTypes" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>100</value>
+				<value>200</value>
+				<value>300</value>
+				<value>500</value>
+				<value>600</value>
+				<value>610</value>
+				<value>620</value>
+				<value>630</value>
+				<value>650</value>
+				<value>700</value>
+				<value>800</value>
+				<value>900</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="tradeMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="-trade-test-biztype">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CREATE" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<entry key="trade-test-nobiztype">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_MODIFY_FEE" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="refundMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 退款创建 -->
+				<entry key="refund-test">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CLOSE_AND_MODIFY_DETAIL_ORDER" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="tradePlusMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 交易评价变更 -->
+				<entry key="-tradeplust-test">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CLOSE" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="itemMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 新增商品 -->
+				<entry key="item-test">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_BUYER_PAY" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="vasMessages" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <!-- 淘宝增值服务扣款成功 -->
+                <entry key="vas-test">
+                    <bean class="com.taobao.top.notify.domain.SubscriberNode">
+                        <property name="statusName" value="VAS_BILLING_SUCCESS" />
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>

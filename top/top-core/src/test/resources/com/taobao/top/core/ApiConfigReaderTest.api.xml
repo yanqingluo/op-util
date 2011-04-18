@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api xmlns="http://apidefine.taobao.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://apidefine.taobao.com http://10.1.5.104/top/apidefine.xsd"
+	 name="taobao.api.test">
+	<type>insert</type>
+	<hsf interface_name="MyInterfaceName" interface_version="1.0.0" method_name="MyMethodName" />
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="timestamp" />
+				<param name="session" />
+			</must>
+			<private></private>
+		</protocol>
+		<application>
+			<must>
+				<param name="string" type="string" cn_name="我是字符串" need_trim="true"/>
+				<param name="stringLength" type="string" length="10" cn_name="我是字符串"/>
+				<param name="number" type="number" cn_name="我是数字"/>
+				<param name="numberList" type="number" cn_name="我是数字列表" max_list_size="2" />
+				<param name="numberLength" type="number" length="10" cn_name="我是数字"/>
+				<param name="numberLengthMin" type="number" length="10" min_value="0"  cn_name="我是数字" need_trim="false"/>
+				<param name="numberLengthMax" type="number" length="10" max_value="1"  cn_name="我是数字"/>
+				<param name="numberLengthMinMax" type="number" length="10" min_value="0" max_value="1"  cn_name="我是数字"/>
+				<param name="fieldList" type="field_list" length="10"  cn_name="我是Field List"/>
+				<param name="byteArray" type="byte[]" length="10" file_ext="JPG, bmp" cn_name="我是Byte Array" />
+			</must>
+			<optional validate="true">
+				<param name="stringOptional" type="string" length="10"/>
+				<param name="stringOptionalNotValidate" type="string" length="10" validate="false"/>
+				<param name="numberOptional" type="number"  min_value="0" />
+				<param name="numberOptionalNotValidate" type="number"  min_value="0" validate="false"/>
+				<param name="fieldListOptional" type="field_list" length="10" />
+				<param name="fieldListOptionalNotValidate" type="field_list" length="10" validate="false"/>
+			</optional>			
+		</application>
+	</params>
+	<statement class="com.taobao.top.core.mock.MockedApiStatement">
+	</statement>
+</api>

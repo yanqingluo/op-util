@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- Real Data Sources -->
+	<bean id="TNDB_1" class="org.apache.commons.dbcp.BasicDataSource"
+		init-method="createDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${mysql.db1.url}" />
+		<property name="username" value="${mysql.db1.username}" />
+		<property name="password" value="${mysql.db1.password}" />
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="-1" />
+		<property name="maxIdle" value="-1" />
+		<property name="maxWait" value="1500" />
+		<property name="maxActive" value="100" />
+		<property name="poolPreparedStatements" value="true" />
+	</bean>
+
+	<bean id="TNDB_2" class="org.apache.commons.dbcp.BasicDataSource"
+		init-method="createDataSource" destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="${mysql.db2.url}" />
+		<property name="username" value="${mysql.db2.username}" />
+		<property name="password" value="${mysql.db2.password}" />
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="-1" />
+		<property name="maxIdle" value="-1" />
+		<property name="maxWait" value="1500" />
+		<property name="maxActive" value="100" />
+		<property name="poolPreparedStatements" value="true" />
+	</bean>
+
+
+	<!-- TDDL Data Sources-->
+	<bean id="TDDL_PROXY_TNDB" class="com.taobao.tddl.client.jdbc.TDataSource"
+		init-method="init">
+		<!-- real data sources proxy -->
+		<property name="dataSourcePool">
+			<map>
+				<entry key="TNDB_1" value-ref="TNDB_1" />
+				<entry key="TNDB_2" value-ref="TNDB_2" />
+			</map>
+		</property>
+		<property name="useLocalConfig" value="true" />
+		<property name="writeReadDispatcherRuleUrl" value="classpath:taobao-tddl.xml" />
+		<property name="timeoutThreshold" value="200" />
+	</bean>
+
+	<!-- iBatis Clients -->
+	<bean id="tddlSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-config.xml" />
+		<property name="dataSource" ref="TDDL_PROXY_TNDB" />
+	</bean>
+	
+	<!-- iBatis Templates -->
+	<bean id="tddlIbatisTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="tddlSqlMapClient" />
+	</bean>
+	
+	<!-- Notify DAO -->
+	<bean id="notifyDao" class="com.taobao.top.notify.persist.impl.NotifyDaoImpl">
+		<property name="ibatisTemplate" ref="tddlIbatisTemplate" />
+	</bean>
+
+	<!-- Notify Writer -->
+	<bean id="notifyWriter" class="com.taobao.top.notify.persist.impl.NotifyWriterImpl">
+		<property name="notifyDao" ref="notifyDao" />
+	</bean>
+
+	<!-- Notify Service -->
+	<bean id="notifyService" class="com.taobao.top.notify.service.impl.NotifyServiceImpl">
+		<property name="notifyDao" ref="notifyDao" />
+	</bean>
+
+	<bean id="notifyWriterMock" class="com.taobao.top.notify.persist.impl.NotifyWriterMock" />
+	<bean id="notifyServiceMock" class="com.taobao.top.notify.persist.impl.NotifyServiceMock" />
+	<bean id="notifyServiceMockOfSubNull" class="com.taobao.top.notify.persist.impl.NotifyServiceMockOfSubNull" />
+	<bean id="notifyServiceMockOfWrongSubPage" class="com.taobao.top.notify.persist.impl.NotifyServiceMockOfWrongSubPage" />
+	<bean id="notifyServiceMockOfWrongAuthoPage" class="com.taobao.top.notify.persist.impl.NotifyServiceMockOfWrongAuthoPage" />
+
+</beans>

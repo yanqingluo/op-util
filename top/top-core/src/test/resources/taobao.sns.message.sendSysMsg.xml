@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="taobao.sns.message.sendSysMsg" v="1.0,2.0">
+	<hsf interface_name="com.taobao.core.biz.top.BBJTopService" interface_version="1.0.0.daily" method_name="searchSpu" />
+	<type>insert</type>
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="timestamp" />
+				<param name="session" />
+			</must>
+			<private></private>
+		</protocol>
+	</params>
+	<tbql-error>
+		<!-- 默认的失败错误码 -->
+		<default>
+			<code>700</code>
+		</default>
+	</tbql-error>
+</api>

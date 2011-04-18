@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">
+    <bean name="whiteListManager" class="com.taobao.top.privilege.WhiteListManagerImpl">
+        <property name="whiteAppList">
+            <list>
+                <!-- 淘宝助理appKey -->
+                <value>${top.tbasistant.whiteapp}</value>
+                <!-- 桃花源appKey -->
+                <value>${top.taohuayuan.whiteapp}</value>
+                <!--e链通的appkey-->
+                <value>${top.eliantong.whiteapp}</value>
+            </list>
+        </property>
+        
+        <property name="whiteIpList">
+            <list>
+                <!-- 淘宝助理ip -->
+                <value>${top.tbasistant.whiteips}</value>
+                <!--e链通的ip-->
+                <value>${top.eliantong.whiteips}</value>
+            </list>
+        </property>
+    </bean>
+</beans>

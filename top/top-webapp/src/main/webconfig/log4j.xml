@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="PROJECT" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/top.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{3}:%L] - %m%n" />
+		</layout>
+	</appender>
+	<appender name="cache" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/cache.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{10}] - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="ispError" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/top-isp-error.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<appender name="toplog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/top-access.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	<appender name="category" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/catserver.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{10}] - %m%n" />
+		</layout>
+	</appender>
+	<appender name="forest" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/forest.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{10}] - %m%n" />
+		</layout>
+	</appender>
+	<appender name="nagios_appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/alert_nagios.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>	
+	<appender name="topPageAPI" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/topPageAPI.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{10}] - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="accessControl" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/accessControl.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %p [%c{10}] - %m%n" />
+		</layout>
+	</appender>	
+	<appender name="tradeapilog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${top.loggingRoot}/top-trade-api.log" />
+		<param name="append" value="true" />
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+	<appender name="richclient" class="org.apache.log4j.DailyRollingFileAppender">
+      <param name="file" value="${top.loggingRoot}/richclient.log" />
+      <param name="append" value="true" />
+      <param name="encoding" value="UTF-8" />
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d %p [%c{1}] - %m%n" />
+      </layout>
+   </appender>
+   
+   <logger name="com.taobao.top.tim.client" additivity="false">
+      <level value="info" />
+      <appender-ref ref="richclient" />
+   </logger>
+   
+	<logger name="com.taobao.common.category" additivity="false">
+		<level value="${top.catserver.loggingLevel}" />
+		<appender-ref ref="category" />
+	</logger>
+	<logger name="com.taobao.remote.client" additivity="false">
+		<level value="${top.catserver.loggingLevel}" />
+		<appender-ref ref="category" />
+	</logger>
+	<logger name="com.taobao.top.common.cache" additivity="false">
+		<level value="${top.loggingLevel}" />
+		<appender-ref ref="cache" />
+	</logger>
+	<logger name="com.taobao.top.log.asyn.WriteSchedule" additivity="false">
+		<level value="FATAL" />
+		<appender-ref ref="toplog" />
+	</logger>
+	<logger name="com.taobao.top.ispError" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="ispError" />
+	</logger>	
+	<logger name="com.taobao.monitor.alert.client.nagios.NagiosSender" additivity="true">
+		<level value="warn" />
+		<appender-ref ref="nagios_appender" />		
+	</logger>	
+
+	<logger name="com.taobao.top.pageapi" additivity="false">
+		<level value="${top.loggingLevel}" />
+		<appender-ref ref="topPageAPI" />
+	</logger>
+	
+	<logger name="com.taobao.top.tradeApi" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="tradeapilog" />
+	</logger>	
+	
+	<logger name="com.taobao.top.core.accesscontrol" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="accessControl" />
+	</logger>
+	
+	<!-- Limit the Parameters category to ERROR as its WARN is verbose -->
+	<category name="org.apache.tomcat.util.http.Parameters">
+		<priority value="ERROR" />
+	</category>
+
+	<!-- Limit the HttpMethodBase category to ERROR as its WARN is verbose-->
+	<category name="org.apache.commons.httpclient.HttpMethodBase">
+		<priority value="ERROR" />
+	</category>
+
+	<root>
+		<level value="${top.loggingLevel}" />
+		<appender-ref ref="PROJECT" />
+	</root>
+</log4j:configuration>

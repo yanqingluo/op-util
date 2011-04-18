@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean name="apiConfigReaderForTest" class="com.taobao.top.core.ApiConfigReader">
+		<property name="templateConfigs">
+			<list>
+				<value>classpath:/com/taobao/top/core/api-template-item_ApiConfigReaderTest.xml</value>
+			</list>
+		</property>		
+	</bean>
+</beans>

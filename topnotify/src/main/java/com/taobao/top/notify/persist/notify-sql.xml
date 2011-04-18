@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="top.notify">
+	<resultMap id="result-notify" class="com.taobao.top.notify.domain.NotifyDO">
+		<result property="category" column="category" />
+		<result property="bizType" column="biz_type" />
+		<result property="status" column="status" />
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="content" column="content" />
+		<result property="gmtCreate" column="gmt_create" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+
+	<insert id="addNotify" parameterClass="com.taobao.top.notify.domain.NotifyDO">
+		INSERT INTO top_notify (id, app_key, category, biz_type, status, user_id, user_name, content, gmt_create, gmt_modified)
+		VALUES (#id#, #appKey#, #category#, #bizType#, #status#, #userId#, #userName#, #content#, #gmtCreate#, #gmtModified#)
+    </insert>
+
+	<select id="queryNotifys" parameterClass="com.taobao.top.notify.domain.query.NotifyQuery" resultMap="result-notify">
+        SELECT b.category,b.biz_type,b.status,b.user_id,b.user_name,b.content,b.gmt_create,b.gmt_modified FROM
+        (SELECT id FROM top_notify WHERE user_id = #userId# AND app_key = #appKey# AND gmt_modified &gt;= #startModified# AND gmt_modified &lt;= #endModified#
+		<isNotEmpty property="category" prepend="AND ">category = #category#</isNotEmpty>
+		<isNotEmpty property="bizType" prepend="AND ">biz_type = #bizType#</isNotEmpty>
+		<isNotEmpty property="status" prepend="AND ">status = #status#</isNotEmpty>
+		ORDER BY gmt_modified DESC LIMIT #offset#,#pageSize#) AS a, top_notify AS b WHERE a.id=b.id 
+	</select>
+
+	<select id="queryNotifysTotal" parameterClass="com.taobao.top.notify.domain.query.NotifyQuery" resultClass="int">
+		SELECT count(*) FROM top_notify WHERE user_id = #userId# AND app_key = #appKey# AND gmt_modified &gt;= #startModified# AND gmt_modified &lt;= #endModified#
+		<isNotEmpty property="category" prepend="AND ">category = #category#</isNotEmpty>
+		<isNotEmpty property="bizType" prepend="AND ">biz_type = #bizType#</isNotEmpty>
+		<isNotEmpty property="status" prepend="AND ">status = #status#</isNotEmpty>
+	</select>
+
+    <!-- for test only -->
+	<select id="getNotify" parameterClass="long" resultMap="result-notify">
+		SELECT category,biz_type,status,user_id,user_name,content,gmt_create,gmt_modified FROM top_notify WHERE id=#value#
+	</select>
+</sqlMap>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="tmAddressHandler" class="com.taobao.loadbalance.SimpleRandomRouter" />
+	<bean name="refundAddressHandler" class="com.taobao.loadbalance.SimpleRandomRouter" />
+	<bean name="tmPageRelayConverter" class="com.taobao.top.pageapi.services.TOPRelayConverter" >	
+		<property name="apiFactory" ref="apiFactory"></property>
+		<property name="pattern" value="{0}/{2}{3}"/>
+	</bean>
+	<bean name="refundPageRelayConverter" class="com.taobao.top.pageapi.services.TOPRelayConverter" >	
+		<property name="apiFactory" ref="apiFactory"></property>
+		<property name="pattern" value="{0}/{2}{3}"/>
+	</bean>
+	<bean name="tmServiceAddressingService" init-method="init" class="com.taobao.loadbalance.ClientSide">
+		<property name="group" value="top_open_page"/>
+		<property name="dataId" value="${top.tm.shopex.trade.service.id}"/>
+		<property name="addressHandler" ref="tmAddressHandler"/>
+	</bean>
+	
+	<bean name="refundServiceAddressingService" init-method="init" class="com.taobao.loadbalance.ClientSide">
+		<property name="group" value="top_open_page"/>
+		<property name="dataId" value="${top.tm.shopex.refund.service.id}"/>
+		<property name="addressHandler" ref="refundAddressHandler"/>
+	</bean>
+	
+	<bean name="top_open_page_trade_management" init-method="init" class="com.taobao.loadbalance.http.PoolingRelayTunnel">
+		<property name="addressingService" ref="tmServiceAddressingService"/>
+		<property name="relayConverter" ref="tmPageRelayConverter"/>
+<!--		<property name="requestProcessor" ref="rewriteProcessor"></property>-->
+		<property name="socketTimeout" value="5000"/>
+	</bean>	
+	
+	<bean name="top_open_page_trade_refund" init-method="init" class="com.taobao.loadbalance.http.PoolingRelayTunnel">
+		<property name="addressingService" ref="refundServiceAddressingService"/>
+		<property name="relayConverter" ref="refundPageRelayConverter"/>
+<!--		<property name="requestProcessor" ref="rewriteProcessor"></property>-->
+		<property name="socketTimeout" value="5000"/>
+	</bean>	
+	
+	<!-- add by zhuyong.pt -->
+	
+	<bean name="buyAddressHandler" class="com.taobao.loadbalance.SimpleRandomRouter" />
+	<bean name="buyServiceAddressingService" init-method="init" class="com.taobao.loadbalance.ClientSide">
+		<property name="group" value="top_open_page"/>
+		<!-- wait for change <property name="dataId" value="${top.buy.shopex.trade.service.id}"/>-->
+		<property name="dataId" value="${top.buy.shopex.trade.service.id}"/>
+		<property name="addressHandler" ref="buyAddressHandler"/>
+	</bean>
+	<bean name="buyPageRelayConverter" class="com.taobao.top.pageapi.services.TOPRelayConverter" >	
+		<property name="apiFactory" ref="apiFactory"></property>
+		<property name="pattern" value="{0}{2}{3}"/>
+	</bean>
+	<bean name="top_open_page_trade_buy" init-method="init" class="com.taobao.loadbalance.http.PoolingRelayTunnel">
+		<property name="addressingService" ref="buyServiceAddressingService"/>
+		<property name="relayConverter" ref="buyPageRelayConverter"/>
+<!--		<property name="requestProcessor" ref="rewriteProcessor"></property>-->
+		<property name="socketTimeout" value="5000"/>
+	</bean>
+	<bean name="buyService" class="com.taobao.top.pageapi.services.DefaultTBService">
+	    <property name="relayTunnel" ref="top_open_page_trade_buy"/>	   
+	</bean>
+<!--	<bean id="rewriteProcessor" class="com.taobao.loadbalance.http.impl.RewriteRequestProcessor">-->
+<!--		<property name="pathRewriteHandler" ref="pathRewriteHandler"></property>-->
+<!--	</bean>-->
+<!--	<bean id="pathRewriteHandler" class="com.taobao.top.pageapi.services.PathRewriteHandlerImpl">-->
+<!--		<property name="apiFactory" ref="apiFactory"></property>-->
+<!--	</bean>-->
+	<!-- end add by zhuyong.pt -->
+	<bean name="tmService" class="com.taobao.top.pageapi.services.DefaultTBService">
+	    <property name="relayTunnel" ref="top_open_page_trade_management"/>	   
+	</bean>
+	
+	<bean name="refundService" class="com.taobao.top.pageapi.services.DefaultTBService">
+	    <property name="relayTunnel" ref="top_open_page_trade_refund"/>	    
+	</bean>
+	
+	<bean name="directedRefundService" class="com.taobao.top.pageapi.services.TMDirectTBService">
+	    <property name="relayTunnel" ref="top_open_page_trade_refund"/>
+	    <property name="relayConverter" ref="refundPageRelayConverter"/>
+	</bean>
+		
+	<bean name="serviceFactory" class="com.taobao.top.pageapi.services.TBServiceFactory">
+	    <property name="servicesMap">
+	    <map>
+	    <entry key="tm">
+	    <ref bean="tmService"/> 
+	    </entry>
+	    <entry key="refund">
+	    <ref bean="refundService"/>
+	    </entry>
+	    <entry key="buy">
+	    <ref bean="buyService"/>
+	    </entry>	   
+	    </map>
+	    </property>
+	</bean>
+   
+   <bean name="pageApiExporter" class="com.taobao.top.pageapi.core.impl.PageApiExporter">
+   </bean>
+   <bean name="pageApiExecutor" class="com.taobao.top.pageapi.core.impl.PageAPIExecutorImpl">
+		<property name="serviceFactory" ref="serviceFactory" />
+		<property name="top_sign_key" value = "${top.tm.encrypter.key}"></property>
+		<property name="apiFactory" ref="apiFactory"></property>
+   </bean>
+	
+	<bean id="whiteListDomainService" class="com.taobao.top.pageapi.services.WhiteListDomainService" init-method="init">
+		<property name="filePath" value="${top.loggingRoot}" />
+	</bean>
+	<!--bean id="paywaySignCheckUtil" class="com.taobao.top.pageapi.services.PaywaySignCheckUtil">
+		<property name="dsaUtil" ref="dsaUtil" />
+	</bean-->
+	<!--DSA Sign-->
+	<!--bean id="dsaUtil" class="com.taobao.common.payway.core.dsa.DSAUtil"
+		init-method="init">
+		<property name="privateKeyName" value="${top.pageapi.dsa_key_taobao_private_refName}" />
+		<property name="publicKeyName" value="${top.pageapi.dsa_key_taobao_public_refName}" />
+		<property name="alipayPublicKeyName" value="${top.pageapi.dsa_key_alipay_public_refName}" />
+		<property name="signer" ref="signer" />
+		<property name="verifier" ref="verifier" />
+	</bean-->
+</beans>

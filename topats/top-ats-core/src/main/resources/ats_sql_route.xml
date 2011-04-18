@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlRoute>
+	<sql id="AtsTaskDao.getParentTask" value="1" />
+</sqlRoute>

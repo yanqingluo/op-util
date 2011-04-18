@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- UIC 3.* upgrade by cilai 2010-8-2 -->
+	<bean id="clientInfo" class="com.taobao.uic.common.util.ClientInfo">
+		<property name="appName" value="topapi"></property>
+		<property name="email" value="wuxiao@taobao.com"></property>
+	</bean>
+	<bean id="uicCacheManager" class="com.taobao.uic.common.cache.DefaultUICCacheService"
+		init-method="init">
+		<property name="configServerVersion" value="${top.uic.version.L0}"></property>
+	</bean>
+	<bean id="uicReadService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName" value="com.taobao.uic.common.service.userinfo.UicReadService" />
+		<property name="version" value="${top.uic.version}" />
+	</bean>
+
+	<bean id="uicReadServiceClient" class="com.taobao.uic.common.service.userinfo.client.UicReadServiceClient">
+		<property name="clientInfo">
+			<ref local="clientInfo" />
+		</property>
+		<property name="uicReadService">
+			<ref local="uicReadService" />
+		</property>
+		<property name="uicExtraReadServiceClient">
+			<ref local="uicExtraReadServiceClient" />
+		</property>
+		<property name="uicCacheService">
+			<ref local="uicCacheManager" />
+		</property>
+	</bean>
+
+	<bean id="uicExtraReadService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName" value="com.taobao.uic.common.service.userinfo.UicExtraReadService" />
+		<property name="version" value="${top.uic.version}" />
+	</bean>
+	<bean id="uicExtraReadServiceClient" class="com.taobao.uic.common.service.userinfo.client.UicExtraReadServiceClient">
+		<property name="clientInfo">
+			<ref local="clientInfo" />
+		</property>
+		<property name="uicExtraReadService">
+			<ref local="uicExtraReadService" />
+		</property>
+		<property name="uicCacheService">
+			<ref local="uicCacheManager" />
+		</property>
+	</bean>
+</beans>

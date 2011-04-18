@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task>
+    <!-- 前置校验hsf服务配置 -->
+    <pre_check type="hsf" interface="taobao.trade.certsign.check" method="checkCertsign" version="1.0.0" />
+    <!-- 子任务hsf服务配置 -->
+    <sub_task type="hsf" interface="taobao.trade.price.update" method="updateTradePrice" version="1.0.0" />
+    <!-- 入参校验规则 -->
+    <params min_size="1" max_size="40">
+        <param name="tids" target_name="tid" enable_split="true" separator=";" target_enable_null="false" target_type="number" />
+    </params>
+</task>
+
+

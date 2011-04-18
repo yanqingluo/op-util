@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean name="apiExporter" class="com.taobao.top.core.DefaultApiExporter" >
+		<property name="debugController" ref="ispDebugController" />	
+		<property name="errorCodeTransform" ref="errorCodeTransform"/>	
+	</bean>
+	
+	<bean name="redirectBlackBoxEngine" class="com.taobao.top.core.RedirectBlackBoxEngine">
+		<property name="tipSecret" value="${top.tip.encrypter.key}" />
+	</bean>
+	
+	<bean name="apiExecutor" class="com.taobao.top.core.DefaultApiExecutor">
+		<property name="blackBoxEngine" ref="blackBoxEngine" />
+		<property name="redirectBlackBoxEngine" ref="redirectBlackBoxEngine" />		
+		<property name="debugController" ref="ispDebugController" />		
+	</bean>
+
+	<bean name="callLimitManager" class="com.taobao.top.core.DefaultCallLimitManager">
+		<property name="cacheClient" ref="counterCacheClient" />
+	</bean>
+	<bean name="blackListManager" class="com.taobao.top.privilege.BlackListManagerImpl">
+		<property name="cacheClient" ref="blacklistCacheClient" />
+	</bean>
+	
+	<bean name="flowGuard" class="com.taobao.top.core.accesscontrol.FlowGuardImpl">
+		<property name="blackListManager" ref="blackListManager" />
+	</bean>
+	
+ 	<bean name="asyncCallRecorder" class="com.taobao.top.core.accesscontrol.AsyncCallRecorder">
+		<constructor-arg ref="syncCallRecorder"/>
+		<constructor-arg value="${top.tip.callqueue.size}" />
+		<constructor-arg value="${top.tip.callqueue.consumerCount}" />
+	</bean> 
+	
+	<bean name="syncCallRecorder" class="com.taobao.top.core.accesscontrol.SyncCallRecorder">
+		<property name="blackListManager" ref="blackListManager" />
+		<property name="callLimitManager" ref="callLimitManager" />
+	</bean>
+	
+	<bean name="flowRulesConstructor" class="com.taobao.top.core.accesscontrol.FlowRulesConstructor">
+		<property name="tadgetManager" ref="tadgetManager" />
+	</bean>
+
+	<bean name="apiFactory" class="com.taobao.top.core.DynamicApiFactory">
+		<property name="timService" ref="localCachedTIMService" />
+		<property name="tfsEnvOnline" value="${top.tfs.env.online}" />
+		<property name="tfsManager" ref="tfsManager" />
+	</bean>
+
+	<bean name="blackBoxEngine" class="com.taobao.top.core.DefaultBlackBoxEngine">
+		<property name="consumerFactory" ref="consumerFactory" />
+		<property name="enableHsfVersionDailyPostfix" value="${top.api.factory.enableDaily}"></property>
+		<property name="sandbox" value="${top.current.env.sandbox}"/>
+	</bean>
+
+	<!-- hsf consumer factory -->
+	<bean name="consumerFactory"
+		class="com.taobao.top.core.HSFConsumerFactoryBean">
+	</bean>
+
+</beans>
