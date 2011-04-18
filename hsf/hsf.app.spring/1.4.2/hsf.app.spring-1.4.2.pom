@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>hsf-all</artifactId>
+		<groupId>com.taobao.hsf</groupId>
+		<version>1.4.2</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>${app-spring.aid}</artifactId>
+	<version>${app-spring.version}</version>
+	<name>${app-spring.name}</name>
+	<packaging>jar</packaging>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/main/META-INF</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+							<outputDirectory>META-INF</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.hsf</groupId>
+			<artifactId>hsf.services</artifactId>
+			<version>${hsf-all.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.hsf</groupId>
+			<artifactId>hsf.lib</artifactId>
+			<version>${hsf-all.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.hsf</groupId>
+			<artifactId>hsf.service.address</artifactId>
+			<version>${hsf-all.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

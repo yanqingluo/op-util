@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<artifactId>hsf-all</artifactId>
+		<groupId>com.taobao.hsf</groupId>
+		<version>1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>${common.aid}</artifactId>
+	<version>${common.version}</version>
+	<name>${common.name}</name>
+    <packaging>jar</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<scope>provided</scope> <!-- JBOSS PROVIDED -->
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.remoting</groupId>
+			<artifactId>network.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.taobao.hsf</groupId>
+			<artifactId>${test-common.aid}</artifactId>
+			<version>${test-common.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

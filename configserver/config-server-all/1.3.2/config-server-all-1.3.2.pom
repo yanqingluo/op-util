@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<inceptionYear>2005</inceptionYear>
+	<parent>
+		<groupId>com.taobao</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.1</version>
+	</parent>
+	<groupId>com.taobao.configserver</groupId>
+	<artifactId>config-server-all</artifactId>
+	<packaging>pom</packaging>
+	<version>1.3.2</version>
+	<name>taobao config server v${project.version}</name>
+	<properties>
+		<config-common.aid>config-common</config-common.aid>
+		<config-common.version>1.3.1</config-common.version>
+		<config-common.name>config common v${config-common.version}</config-common.name>
+
+		<config-client.aid>config-client</config-client.aid>
+		<config-client.version>1.3.2</config-client.version>
+		<config-client.name>config client v${config-client.version}</config-client.name>
+
+		<config-server.aid>config-server</config-server.aid>
+		<config-server.version>1.3</config-server.version>
+		<config-server.name>config server v${config-server.version}</config-server.name>
+
+		<config-console.aid>config-console</config-console.aid>
+		<config-console.version>${config-server.version}</config-console.version>
+		<config-console.name>config console v${config-console.version}</config-console.name>
+
+		<config-server-common.aid>config-server-common</config-server-common.aid>
+		<config-server-common.version>${config-server.version}</config-server-common.version>
+		<config-server-common.name>config server common v${config-server-common.version}</config-server-common.name>
+
+		<config-server-plugin.aid>config-server-plugin</config-server-plugin.aid>
+		<config-server-plugin.version>${config-server.version}</config-server-plugin.version>
+		<config-server-plugin.name>config server plugin v${config-server-plugin.version}</config-server-plugin.name>
+
+		<config-server-service.aid>config-server-service</config-server-service.aid>
+		<config-server-service.version>${config-server.version}</config-server-service.version>
+		<config-server-service.name>config server service v${config-server-service.version}</config-server-service.name>
+	</properties>
+	<scm>
+		<developerConnection>
+			scm:svn:http://svn.taobao-develop.com/repos/confsrv/trunk/confsrv
+		</developerConnection>
+	</scm>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>config-server/release.xml</descriptor>
+						<descriptor>config-console/release.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.alibaba.maven.plugins</groupId>
+				<artifactId>maven-build-number-plugin</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<useLastCommittedRevision>true</useLastCommittedRevision>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<includes>
+						<include>**/*.class</include>
+						<include>**/*.conf</include>
+						<include>**/*.xml</include>
+					</includes>
+					<archive>
+						<manifestEntries>
+							<revision>${buildNumber}</revision>
+							<buildTime>${buildTime}</buildTime>
+							<svnDevelopUrl>${svnDevelopUrl}</svnDevelopUrl>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-common.aid}</artifactId>
+				<version>${config-common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-client.aid}</artifactId>
+				<version>${config-client.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-server.aid}</artifactId>
+				<version>${config-server.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-console.aid}</artifactId>
+				<version>${config-console.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-server-common.aid}</artifactId>
+				<version>${config-server-common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-server-plugin.aid}</artifactId>
+				<version>${config-server-plugin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${pom.groupId}</groupId>
+				<artifactId>${config-server-service.aid}</artifactId>
+				<version>${config-server-service.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.taobao.remoting</groupId>
+				<artifactId>network.core</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.taobao.logstat</groupId>
+				<artifactId>logstat-client</artifactId>
+				<version>1.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.14</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.mina</groupId>
+				<artifactId>mina-core</artifactId>
+				<version>1.1.5</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.4</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.guice</groupId>
+				<artifactId>guice</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.3</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>1.4</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
