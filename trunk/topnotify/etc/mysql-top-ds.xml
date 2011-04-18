@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+	<local-tx-datasource>
+		<jndi-name>DS_TopNotify_0</jndi-name>
+		<connection-url>jdbc:mysql://10.232.31.7:3306/top_notify_0?useUnicode=true&amp;charaterEncoding=utf-8</connection-url>
+		<connection-property name="SetBigStringTryClob">true</connection-property>
+		<connection-property name="defaultRowPrefetch">50</connection-property>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<min-pool-size>2</min-pool-size>
+		<max-pool-size>10</max-pool-size>
+		<prepared-statement-cache-size>100</prepared-statement-cache-size>
+		<exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+		<user-name>top</user-name>
+		<password>top</password>
+	</local-tx-datasource>
+	<local-tx-datasource>
+		<jndi-name>DS_TopNotify_1</jndi-name>
+		<connection-url>jdbc:mysql://10.232.31.7:3306/top_notify_1?useUnicode=true&amp;charaterEncoding=utf-8</connection-url>
+		<connection-property name="SetBigStringTryClob">true</connection-property>
+		<connection-property name="defaultRowPrefetch">50</connection-property>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<min-pool-size>2</min-pool-size>
+		<max-pool-size>10</max-pool-size>
+		<prepared-statement-cache-size>100</prepared-statement-cache-size>
+		<exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+		<user-name>top</user-name>
+		<password>top</password>
+	</local-tx-datasource>
+	<local-tx-datasource>
+		<jndi-name>DS_TopNotify_2</jndi-name>
+		<connection-url>jdbc:mysql://10.232.31.7:3306/top_notify_2?useUnicode=true&amp;charaterEncoding=utf-8</connection-url>
+		<connection-property name="SetBigStringTryClob">true</connection-property>
+		<connection-property name="defaultRowPrefetch">50</connection-property>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<min-pool-size>2</min-pool-size>
+		<max-pool-size>10</max-pool-size>
+		<prepared-statement-cache-size>100</prepared-statement-cache-size>
+		<exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+		<user-name>top</user-name>
+		<password>top</password>
+	</local-tx-datasource>
+	<local-tx-datasource>
+		<jndi-name>DS_TopNotify_3</jndi-name>
+		<connection-url>jdbc:mysql://10.232.31.7:3306/top_notify_3?useUnicode=true&amp;charaterEncoding=utf-8</connection-url>
+		<connection-property name="SetBigStringTryClob">true</connection-property>
+		<connection-property name="defaultRowPrefetch">50</connection-property>
+		<driver-class>com.mysql.jdbc.Driver</driver-class>
+		<min-pool-size>2</min-pool-size>
+		<max-pool-size>10</max-pool-size>
+		<prepared-statement-cache-size>100</prepared-statement-cache-size>
+		<exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter</exception-sorter-class-name>
+		<metadata>
+			<type-mapping>mySQL</type-mapping>
+		</metadata>
+		<user-name>top</user-name>
+		<password>top</password>
+	</local-tx-datasource>
+</datasources>

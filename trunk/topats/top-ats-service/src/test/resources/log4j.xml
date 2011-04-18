@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %c{1}\:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="monitor" class="org.apache.log4j.ConsoleAppender">
+		<param name="encoding" value="UTF-8" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+	</appender>
+
+	<logger name="com.taobao.monitor.alert.client.nagios.NagiosSender" additivity="true">
+		<level value="warn" />
+		<appender-ref ref="monitor" />
+	</logger>
+
+	<category name="com.taobao.top.notify">
+		<priority value="info" />
+	</category>
+
+    <category name="com.taobao.common.tair">
+        <priority value="info" />
+    </category>
+
+	<root>
+		<priority value="info" />
+		<appender-ref ref="stdout" />
+	</root>
+</log4j:configuration>

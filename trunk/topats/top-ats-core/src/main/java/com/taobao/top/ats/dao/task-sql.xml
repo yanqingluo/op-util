@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap  PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="AtsTaskDao">
+	<resultMap id="result-task" class="com.taobao.top.ats.domain.AtsTaskDO">
+		<result property="id" column="id" />
+		<result property="appKey" column="app_key" />
+		<result property="apiName" column="api_name" />
+		<result property="priority" column="priority" />
+		<result property="retries" column="retries" />
+		<result property="status" column="status" />
+		<result property="response" column="response" />
+		<result property="gmtCreated" column="gmt_create" />
+		<result property="attributesString" column="attributes" />
+	</resultMap>
+
+	<resultMap id="result-subtask" class="com.taobao.top.ats.domain.SubAtsTaskDO">
+		<result property="id" column="id" />
+		<result property="pid" column="pid" />
+		<result property="request" column="request" />
+		<result property="status" column="status" />
+		<result property="gmtCreated" column="gmt_create" />
+	</resultMap>
+
+	<insert id="addParentTask" parameterClass="com.taobao.top.ats.domain.AtsTaskDO">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT SEQ_TOP_ATS_TASK_ID.nextval AS id FROM DUAL
+		</selectKey> 
+		INSERT INTO top_ats_task (id,app_key,api_name,priority,retries,status,response,gmt_create,attributes)
+		VALUES (#id#,#appKey#,#apiName#,#priority#,#retries#,#status#,#response#,#gmtCreated#,#attributesString#)
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+	<insert id="addSubTask" parameterClass="com.taobao.top.ats.domain.SubAtsTaskDO">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT SEQ_TOP_ATS_SUB_TASK_ID.nextval AS id FROM DUAL
+		</selectKey> 
+		INSERT INTO top_ats_sub_task (id,pid,request,status,gmt_create)
+		VALUES (#id#,#pid#,#request#,#status#,#gmtCreated#)
+		<selectKey resultClass="long" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+	<select id="getParentTask" parameterClass="long" resultMap="result-task">
+		SELECT * FROM top_ats_task WHERE id=#value#
+	</select>
+
+	<select id="getSubTask" parameterClass="long" resultMap="result-subtask">
+		SELECT * FROM top_ats_sub_task WHERE id=#value#
+	</select>
+
+	<select id="getSubTasks" parameterClass="long" resultMap="result-subtask">
+		SELECT * FROM top_ats_sub_task WHERE pid=#value#
+	</select>
+
+	<update id="updateParentTask" parameterClass="com.taobao.top.ats.domain.AtsTaskDO">
+		UPDATE top_ats_task SET priority=#priority#,
+		retries=#retries#,
+		status=#status#,
+		response=#response#,
+		attributes=#attributesString#
+		WHERE id=#id#
+	</update>
+
+	<update id="updateSubTask" parameterClass="com.taobao.top.ats.domain.SubAtsTaskDO">
+		UPDATE top_ats_sub_task SET request=#request#, status=#status# WHERE id=#id#
+	</update>
+
+	<select id="queryTasks" parameterClass="com.taobao.top.ats.domain.QueryTaskDO" resultMap="result-task">
+		SELECT t3.* FROM (SELECT *
+		FROM (SELECT t1.*, ROWNUM AS rn
+		FROM (SELECT ROWID rid FROM top_ats_task WHERE status=#taskStatus# AND gmt_create &gt;= #startCreated# AND gmt_create &lt;= #endCreated#) t1
+		WHERE ROWNUM &lt;= #endRow#) WHERE rn &gt;= #startRow#) t2,top_ats_task t3 WHERE t3.ROWID = t2.rid
+	</select>
+
+	<select id="queryTasksTotal" parameterClass="com.taobao.top.ats.domain.QueryTaskDO" resultClass="int">
+		SELECT count(*) FROM top_ats_task WHERE status=#taskStatus# AND gmt_create &gt;= #startCreated# AND gmt_create &lt;= #endCreated#
+	</select>
+
+	<select id="queryCleanableTasks" parameterClass="com.taobao.top.ats.domain.QueryTaskDO" resultMap="result-task">
+		SELECT t3.* FROM (SELECT *
+		FROM (SELECT t1.*, ROWNUM AS rn
+		FROM (SELECT ROWID rid FROM top_ats_task WHERE gmt_create &lt;= #endCreated#) t1
+		WHERE ROWNUM &lt;= #endRow#) WHERE rn &gt;= #startRow#) t2,top_ats_task t3 WHERE t3.ROWID = t2.rid
+	</select>
+
+	<select id="queryCleanableTasksTotal" parameterClass="com.taobao.top.ats.domain.QueryTaskDO" resultClass="int">
+		SELECT count(*) FROM top_ats_task WHERE gmt_create &lt;= #endCreated#
+	</select>
+
+	<delete id="deleteParentTask" parameterClass="long">
+		DELETE FROM top_ats_task WHERE id = #value#
+	</delete>
+
+	<delete id="deleteSubTasks" parameterClass="long">
+		DELETE FROM top_ats_sub_task WHERE pid = #value#
+	</delete>
+
+</sqlMap>

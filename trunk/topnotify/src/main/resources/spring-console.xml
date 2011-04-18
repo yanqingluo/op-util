@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="consoleClientHandler" class="com.taobao.top.console.client.handler.ConsoleClientHandler" init-method="init">
+		<property name="consoleClientPipeList">
+			<list>
+				<ref bean="richClientConfigPipe" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="logPositionManager" class="com.taobao.top.console.client.analysis.LogPositionManager">
+		<constructor-arg index="0" value="${top.notify.logging.dir}/log-position.txt" />
+		<constructor-arg index="1" value="${top.notify.logging.dir}/log-serialize.obj"/>
+	</bean>
+
+	<bean id="smartPositionManager" class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPositionManager">
+		<constructor-arg index="0" value="${top.notify.logging.dir}/log-position2.txt" />
+	</bean>
+
+	<bean id="simpleLogPullHandler" class="com.taobao.top.console.client.analysis.SimpleLogPullHandler">
+		<constructor-arg index="0" ref="logPositionManager" />
+		<property name="logFile" value="${top.notify.logging.dir}/richclient.log" />
+	</bean>
+
+	<bean id="smartLogPullHandler" class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPullHandler">
+		<constructor-arg index="0" ref="smartPositionManager" />
+		<property name="logFile" value="${top.notify.logging.dir}/richclient.log" />
+	</bean>
+
+	<bean id="staticsLogPullHandler" class="com.taobao.top.console.client.analysis.LogPullHandler">
+		<constructor-arg index="0" ref="simpleLogPullHandler" />
+		<constructor-arg index="1" ref="smartLogPullHandler" />
+	</bean>
+
+</beans>

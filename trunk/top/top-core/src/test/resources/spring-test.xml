@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean name="tairSessionManager" class="com.taobao.top.sm.TairSessionManagerImpl">
+		<property name="sessionGenerator" ref="sessionGenerator" />
+	</bean>
+	
+	<bean name="topSessionManager" class="com.taobao.top.sm.TopSessionManagerImpl">
+		<property name="tairSessionManager" ref="tairSessionManager" />
+	</bean>
+	
+	<bean name="sessionGenerator" class="com.taobao.top.sm.DefaultSessionGenerator">
+		<property name="cacheClient" ref="sessionCacheClient" />
+		<property name="tipSecret" value="taobao123" />
+	</bean>
+	<bean name="sessionCacheClient" class="com.taobao.top.common.MockDuplicateCacheClient"/>
+</beans>

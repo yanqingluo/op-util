@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">    	
+    <bean id="localCachedTIMService" class="com.taobao.top.timwrapper.LocalCachedTIMService">
+        <property name="timService" ref="samService" />
+        <property name="richClientService" ref="richclientSamService"/>
+        <property name="filterTags">
+        	<list>
+        		<value>8</value><!-- 开源网店 -->
+        	</list>
+        </property>
+    </bean>
+
+	<bean id="samServiceTarget" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.consume.version}</value>
+		</property>
+	</bean>
+	<bean id="samServiceInterceptor" class="com.taobao.top.timwrapper.SamServiceInterceptor">
+		<property name="alertAgent" ref="alertAgent" />
+	</bean>
+	
+	<bean id="samService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="target">
+			<ref local="samServiceTarget" />
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>samServiceInterceptor</value>
+			</list>
+		</property>
+	</bean>
+ 
+	<bean id="tadgetManager" class="com.taobao.top.timwrapper.manager.TadgetManager">
+		<property name="timService" ref="localCachedTIMService" />
+	</bean>
+</beans>

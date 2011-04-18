@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="asynLogWriter" class="com.taobao.top.log.asyn.AsynWriterTemplate"
+		init-method="start"/>
+		
+	
+	<!-- log pull handler, should be in jar and provide simple conf in the future -->
+	<bean id="logPullHandler" class="com.taobao.top.console.client.analysis.LogPullHandler">
+		<constructor-arg ref="simpleLogPullHandler"></constructor-arg>
+		<constructor-arg ref="smartLogPullHandler"></constructor-arg>
+	</bean>
+	<bean id="simpleLogPullHandler" class="com.taobao.top.console.client.analysis.SimpleLogPullHandler">
+		<property name="logFile" value="/home/admin/top/logs/top-access.log" />
+		<constructor-arg ref="logPositionManager"></constructor-arg>  
+	</bean>
+	<bean id="logPositionManager" class="com.taobao.top.console.client.analysis.LogPositionManager">
+		<constructor-arg value="/home/admin/top/logs/log-position.txt"></constructor-arg>
+		<constructor-arg value="/home/admin/top/logs/serialized-position.map"></constructor-arg>		
+	</bean>
+	
+	<bean id="smartLogPullHandler" class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPullHandler">
+		<property name="logFile" value="/home/admin/top/logs/top-access.log" />
+		<constructor-arg ref="smartLogPositionManager"></constructor-arg>  
+	</bean>
+	<bean id="smartLogPositionManager" 
+		class="com.taobao.top.console.client.analysis.smartlogposition.SmartLogPositionManager">
+		<constructor-arg value="/home/admin/top/logs/smart-log-position.txt"></constructor-arg>
+	</bean>	
+</beans>
+
+

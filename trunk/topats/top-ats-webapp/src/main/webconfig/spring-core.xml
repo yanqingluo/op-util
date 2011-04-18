@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="apiManager" class="com.taobao.top.ats.task.api.ApiManagerImpl" init-method="init">
+		<property name="apiEngine" ref="apiEngine" />
+		<property name="samService" ref="samService" />
+		<property name="tfsManager" ref="tfsManager" />
+		<property name="modelFileKey" value="${top.ats.modelFileKey}" />
+		<property name="timApiType" value="${top.ats.timApiType}" />
+	</bean>
+
+	<bean id="samService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean" init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.service.version}</value>
+		</property>
+	</bean>
+
+	<bean id="taskManager" class="com.taobao.top.ats.task.TaskManagerImpl" init-method="init">
+		<property name="samService" ref="samService" />
+		<property name="apiManager" ref="apiManager" />
+		<property name="apiEngine" ref="apiEngine" />
+		<property name="cleanerManager" ref="cleanerManager" />
+		<property name="jobDispatcher" ref="jobDispatcher" />
+		<property name="taskDao" ref="taskDao" />
+		<property name="tfsManager" ref="tfsManager" />
+		<property name="topMQService" ref="topMQService" />
+		<property name="localPath" value="${top.ats.result.localPath}" />
+		<property name="remotePath" value="${top.ats.result.remotePath}" />
+		<property name="taskMonitor" ref="taskMonitor" />
+		<property name="taskExecutePeriod" value="${top.ats.task.executePeriod}" />
+		<property name="taskCleanupPeriod" value="${top.ats.task.cleanupPeriod}" />
+	</bean>
+
+	<bean id="taskMonitor" class="com.taobao.top.ats.monitor.TaskMonitorImpl" init-method="init" />
+
+	<bean id="topMQService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean" init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.mq.TopMQService</value>
+		</property>
+		<property name="version">
+			<value>${top.mq.service.version}</value>
+		</property>
+	</bean>
+
+	<bean id="apiEngine" class="com.taobao.top.ats.engine.ApiEngineImpl">
+		<property name="consumerFactory" ref="consumerFactory" />
+		<property name="hsfSuffix" value="${top.ats.hsf.suffix}" />
+	</bean>
+
+	<bean id="consumerFactory" class="com.taobao.top.ats.engine.hsf.DefaultConsumerFactory" />
+
+	<bean id="urlGenerator" class="com.taobao.top.ats.url.UrlGeneratorImpl">
+		<property name="secret" value="${top.ats.tokenSecret}" />
+		<property name="downloadUrlPre" value="${top.ats.downloadUrlPre}" />
+		<property name="tokenPathPre" value="${top.ats.tokenPathPre}" />
+	</bean>
+
+	<bean id="cleanerManager" class="com.taobao.top.ats.task.cleaner.CleanerManagerImpl">
+		<property name="taskDao" ref="taskDao" />
+		<property name="tfsManager" ref="tfsManager" />
+		<property name="urlGenerator" ref="urlGenerator" />
+		<property name="tokenPathPre" value="${top.ats.tokenPathPre}" />
+		<property name="taskExpiredDays" value="${top.ats.result.expiredDays}" />
+		<property name="localPath" value="${top.ats.result.localPath}" />
+		<property name="remotePath" value="${top.ats.result.remotePath}" />
+		<property name="ipAddress" value="${top.ats.ip.address}" />
+	</bean>
+
+	<bean id="instantJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="0" />
+		<property name="type" value="leave" />
+		<property name="value" value="${top.ats.instant.poolSize}" />
+	</bean>
+
+	<bean id="normalJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="1" />
+		<property name="type" value="limit" />
+		<property name="value" value="${top.ats.normal.poolSize}" />
+	</bean>
+
+	<bean id="freeTimeJobModel" class="com.taobao.top.xbox.threadpool.JobThreadWeightModel">
+		<property name="key" value="2" />
+		<property name="type" value="limit" />
+		<property name="value" value="${top.ats.freetime.poolSize}" />
+	</bean>
+
+	<bean id="jobDispatcher" class="com.taobao.top.xbox.threadpool.JobDispatcher" init-method="init">
+		<property name="maximumPoolSize" value="${top.ats.max.poolSize}" />
+		<property name="maximumQueueSize" value="${top.ats.max.queueSize}" />
+		<property name="jobThreadWeightModel">
+			<list>
+				<ref bean="instantJobModel" />
+				<ref bean="normalJobModel" />
+				<ref bean="freeTimeJobModel" />
+			</list>
+		</property>
+	</bean>
+</beans>

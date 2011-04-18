@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="publicUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<value>
+				<!--  taobao api router  -->
+				/router/rest=newApiRestHandler
+				<!--  page api  -->
+				/router/page=processSelectHandler
+				/router/page/*/*=processSelectHandler
+				<!-- inner entrance -->
+				/services/inner=consoleClientHandler
+				<!--  pull log handler -->
+				/services/logPull=logPullHandler
+			</value>
+        </property>
+		<property name="alwaysUseFullPath">
+			<value>true</value>
+		</property>
+	</bean>
+</beans>

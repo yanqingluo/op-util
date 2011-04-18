@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="GB2312"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>webapp.root</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>WEB-INF/log4j.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:spring-*.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>com.taobao.top.notify.NotifyStartupListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>PreloadServlet</servlet-name>
+		<servlet-class>com.taobao.top.notify.PreloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PreloadServlet</servlet-name>
+		<url-pattern>/preload</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ConsoleServlet</servlet-name>
+		<servlet-class>com.taobao.top.notify.ConsoleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ConsoleServlet</servlet-name>
+		<url-pattern>/console</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PullLogServlet</servlet-name>
+		<servlet-class>com.taobao.top.notify.PullLogServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PullLogServlet</servlet-name>
+		<url-pattern>/log</url-pattern>
+	</servlet-mapping>
+</web-app>

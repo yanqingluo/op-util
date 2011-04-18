@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="sessionCacheClient" class="com.taobao.top.common.cache.tair.DefaultDuplicateClient"
+		init-method="init">
+		<property name="configA" value="${top.cache.session.loc.a}" />
+		<property name="groupA" value="${top.cache.session.group.a}" />
+		<property name="configB" value="${top.cache.session.loc.b}" />
+		<property name="groupB" value="${top.cache.session.group.b}" />
+	</bean>
+	<bean id="blacklistCacheClient" class="com.taobao.top.common.cache.tair.DefaultDuplicateClient"
+		init-method="init">
+		<property name="configA" value="${top.cache.session.loc.a}" />
+		<property name="groupA" value="${top.cache.blacklist.group.a}" />
+		<property name="configB" value="${top.cache.session.loc.b}" />
+		<property name="groupB" value="${top.cache.blacklist.group.b}" />
+	</bean>	
+	<bean id="counterCacheClient" class="com.taobao.top.common.cache.tair.DefaultDuplicateClient"
+		init-method="init">
+		<property name="configA" value="${top.cache.session.loc.a}" />
+		<property name="groupA" value="${top.cache.counter.group.a}" />
+		<property name="configB" value="${top.cache.session.loc.b}" />
+		<property name="groupB" value="${top.cache.counter.group.b}" />
+	</bean>		
+	<bean id="commonCacheClient" class="com.taobao.top.common.cache.tair.DefaultClient"
+		init-method="init">
+		<property name="config" value="${top.cache.common.loc}"></property>
+		<property name="group" value="${top.cache.common.group}"></property>
+	</bean>
+</beans>

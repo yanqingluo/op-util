@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- Real Data Sources -->
+	<bean id="jndiTemplate" class="org.springframework.jndi.JndiTemplate" />
+
+	<bean id="TNDB_1" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="java:DS_TopNotify_0" />
+	</bean>
+
+	<bean id="TNDB_2" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="java:DS_TopNotify_1" />
+	</bean>
+
+	<bean id="TNDB_3" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="java:DS_TopNotify_2" />
+	</bean>
+
+	<bean id="TNDB_4" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiTemplate" ref="jndiTemplate" />
+		<property name="jndiName" value="java:DS_TopNotify_3" />
+	</bean>
+
+	<!-- TDDL Data Sources-->
+	<bean id="TDDL_PROXY_TNDB" class="com.taobao.tddl.client.jdbc.TDataSource" init-method="init">
+		<property name="dataSourcePool">
+			<map>
+				<entry key="TNDB_1" value-ref="TNDB_1" />
+				<entry key="TNDB_2" value-ref="TNDB_2" />
+				<entry key="TNDB_3" value-ref="TNDB_3" />
+				<entry key="TNDB_4" value-ref="TNDB_4" />
+			</map>
+		</property>
+		<property name="useLocalConfig" value="true" />
+		<property name="writeReadDispatcherRuleUrl" value="classpath:taobao-tddl.xml" />
+		<property name="timeoutThreshold" value="200" />
+	</bean>
+	<bean id="TDDL_PROXY_TNDB_OLD" class="com.taobao.tddl.client.jdbc.TDataSource" init-method="init">
+		<property name="dataSourcePool">
+			<map>
+				<entry key="TNDB_1" value-ref="TNDB_1" />
+				<entry key="TNDB_2" value-ref="TNDB_2" />
+			</map>
+		</property>
+		<property name="useLocalConfig" value="true" />
+		<property name="writeReadDispatcherRuleUrl" value="classpath:taobao-tddl-old.xml" />
+		<property name="timeoutThreshold" value="200" />
+	</bean>
+
+	<!-- iBatis Clients -->
+	<bean id="tddlSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-config.xml" />
+		<property name="dataSource" ref="TDDL_PROXY_TNDB" />
+	</bean>
+	<bean id="tddlSqlMapClientOld" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis-config.xml" />
+		<property name="dataSource" ref="TDDL_PROXY_TNDB_OLD" />
+	</bean>
+
+	<!-- iBatis Templates -->
+	<bean id="tddlIbatisTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="tddlSqlMapClient" />
+	</bean>
+	<bean id="tddlIbatisTemplateOld" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="tddlSqlMapClientOld" />
+	</bean>
+
+	<!-- Notify DAO -->
+	<bean id="notifyDao" class="com.taobao.top.notify.persist.impl.NotifyDaoImpl">
+		<property name="ibatisTemplate" ref="tddlIbatisTemplate" />
+		<property name="ibatisTemplateOld" ref="tddlIbatisTemplateOld" />
+	</bean>
+
+	<!-- Notify Service -->
+	<bean id="notifyService" class="com.taobao.top.notify.service.impl.NotifyServiceImpl">
+		<property name="notifyDao" ref="notifyDao" />
+	</bean>
+
+	<!-- Notify Writer -->
+	<bean id="notifyWriter" class="com.taobao.top.notify.persist.impl.NotifyWriterImpl" init-method="init">
+		<property name="notifyDao" ref="notifyDao" />
+	</bean>
+
+	<!-- Notify Service Provider -->
+	<bean class="com.taobao.hsf.app.spring.util.HSFSpringProviderBean" init-method="init">
+		<property name="serviceInterface" value="com.taobao.top.notify.service.NotifyService" />
+		<property name="serviceVersion" value="${top.notify.service.version}" />
+		<property name="target" ref="notifyService" />
+	</bean>
+
+</beans>

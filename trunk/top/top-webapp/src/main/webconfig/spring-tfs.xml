@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="targetTfsManager" class="com.taobao.common.tfs.DefaultTfsManager" init-method="init">
+        <property name="nsip">
+            <value>${top.tfs.nsip}</value>
+        </property>      
+    </bean>
+    <bean id="rTfsProxyFactoryBean" class="com.taobao.common.tfs.RTfsProxyFactoryBean"
+		init-method="init">
+		<property name="target" ref="targetTfsManager" />
+		<property name="parallelRegistrar" ref="parallelRegistrar" />
+		<property name="tfsName">
+			<value>TFS_IMAGE</value>
+		</property>
+	</bean>
+    <bean id="tfsManager" factory-bean="rTfsProxyFactoryBean" factory-method="getProxy"/>
+    
+	<bean id="targetExtraTfsManager" class="com.taobao.common.tfs.DefaultTfsManager" init-method="init">
+        <property name="nsip">
+            <value>${top.pic.tfs.nameserver}</value>
+        </property>      
+    </bean>
+    <bean id="rTfsExtraProxyFactoryBean" class="com.taobao.common.tfs.RTfsProxyFactoryBean"
+		init-method="init">
+		<property name="target" ref="targetExtraTfsManager" />
+		<property name="parallelRegistrar" ref="parallelRegistrar" />
+		<property name="tfsName">
+			<value>TFS_EXTRA</value>
+		</property>
+	</bean>
+	<bean id="extraTfsManager" factory-bean="rTfsExtraProxyFactoryBean" factory-method="getProxy"/>
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean name="tairSessionManager" class="com.taobao.top.sm.TairSessionManagerImpl">
+		<property name="sessionGenerator" ref="sessionGenerator"></property>
+		<property name="tadgetManager" ref="tadgetManager"></property>
+	</bean>
+	
+	<bean name="topSessionManager" class="com.taobao.top.sm.TopSessionManagerImpl">
+		<property name="tairSessionManager" ref="tairSessionManager" />
+		<property name="timSessionManager" ref="timSessionManager" />
+	</bean>
+
+	<bean name="timSessionManager" class="com.taobao.top.sm.TimSessionManagerImpl">
+		<property name="timService" ref="localCachedTIMService"></property>
+	</bean>
+
+	<bean name="sessionGenerator" class="com.taobao.top.sm.DefaultSessionGenerator">
+		<property name="cacheClient" ref="sessionCacheClient"></property>
+		<property name="tipSecret" value="${top.tip.encrypter.key}"></property>
+	</bean>
+</beans>	

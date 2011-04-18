@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="alertAgent" class="com.taobao.monitor.alert.client.AlertAgentImpl" init-method="init">
+		<property name="alertSender" ref="alertSender" />
+		<property name="ruleFactory" ref="alertRuleFactory" />
+	</bean>
+
+	<bean id="alertSender" class="com.taobao.monitor.alert.client.nagios.NagiosSender" />
+
+	<bean id="alertRuleFactory" class="com.taobao.monitor.alert.client.nagios.NagiosAlertRuleFactory" init-method="init">
+		<property name="defaultSlowDownThreshold" value="50" />
+		<property name="defaultDismissDelaySeconds" value="180" />
+		<property name="defaultAutoDismissDelaySeconds" value="86400" />
+	</bean>
+	<bean id="runTimeNotifyLogMonitor" class="com.taobao.top.notify.log.impl.RunTimeNotifyLogMonitorImpl"  init-method="init">
+	</bean>
+	<bean id="runTimeMessageLogMonitor" class="com.taobao.top.notify.log.impl.RunTimeMessageLogMonitorImpl"  init-method="init">
+	</bean>
+	<bean id="topNotifyExceptionLogMonitor" class="com.taobao.top.notify.log.impl.TopNotifyExceptionLogMonitorImpl"  init-method="init">
+	</bean>	
+</beans>

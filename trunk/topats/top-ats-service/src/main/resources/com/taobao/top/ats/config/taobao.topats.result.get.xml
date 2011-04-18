@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<method>
+	<methodCall name="getResult" apiName="taobao.topats.result.get">
+		<params>
+			<param type="java.lang.Long" apiName="task_id" />
+			<param type="string" apiName="$app_key" />
+		</params>
+	</methodCall>
+	<methodResponse>
+		<param exceptionExpress="error=true,errorCode,errorMsg">
+			<type>
+				<struct>
+					<member name="result" apiName="task">
+						<type>
+							<struct>
+								<member name="id" apiName="task_id" apiType="java.lang.Long" />
+								<member name="status" apiName="status" apiType="string">
+								    <switch>
+                                        <case type="java.lang.Integer" value="0" apiValue="new" />
+                                        <case type="java.lang.Integer" value="1" apiValue="doing" />
+                                        <case type="java.lang.Integer" value="2" apiValue="done" />
+                                        <default apiValue="new" />
+                                    </switch>
+						        </member>		
+								<member name="apiName" apiName="method" apiType="string" />
+								<member name="gmtCreated" apiName="created" apiType="string" />
+								<member name="subTasks" apiName="subtasks">
+									<type>
+										<array apiArrayItemName="subtask">
+											<type>
+												<struct>
+													<member name="request" apiName="sub_task_request" apiType="string" />
+													<member name="response" apiName="sub_task_result" apiType="string" />
+													<member name="isSuccess" apiName="is_success" apiType="java.lang.Boolean" />
+												</struct>
+											</type>
+										</array>
+									</type>
+								</member>
+								<member name="downloadUrl" apiName="download_url" apiType="string" />
+							</struct>
+						</type>
+					</member>
+				</struct>
+			</type>
+		</param>
+	</methodResponse>
+</method>

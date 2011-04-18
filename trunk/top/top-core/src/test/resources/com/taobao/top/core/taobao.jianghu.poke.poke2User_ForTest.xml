@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api name="taobao.jianghu.poke.poke2User" v="2.0" redirectUrl="http://10.2.225.247:8080/rest/">
+	<type>insert</type>
+	<params>
+		<protocol>
+			<must>
+				<param name="api_key" />
+				<param name="sign" />
+				<param name="timestamp" />
+			</must>
+			<private></private>
+		</protocol>
+		<application>
+			<must>
+			</must>
+			<optional>
+			</optional>
+		</application>
+	</params>
+</api>

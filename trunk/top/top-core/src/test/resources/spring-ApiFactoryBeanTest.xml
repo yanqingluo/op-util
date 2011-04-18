@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean name="apiFactory" class="com.taobao.top.config.spring.ApiFactoryBean">
+		
+		<property name="apiConfigs">
+			<list>
+				<value>classpath:taobao.sns.message.sendSysMsg.xml</value>
+			</list>
+		</property>
+		<property name="mappingConfigs">
+			<list>
+				<value>classpath:api-mapping-sendSysMsg.xml</value>
+			</list>
+		</property>
+		<property name="abstractApiFactory">
+			<bean class="com.taobao.top.core.DefaultApiFactory" />
+		</property>
+	</bean>
+
+</beans>

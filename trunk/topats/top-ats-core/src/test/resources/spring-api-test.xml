@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="tfsManager" factory-bean="rTfsProxyFactoryBean" factory-method="getProxy" />
+
+	<bean id="rTfsProxyFactoryBean" class="com.taobao.common.tfs.RTfsProxyFactoryBean"
+		init-method="init">
+		<property name="target" ref="targetTfsManager" />
+		<property name="parallelRegistrar" ref="parallelRegistrar" />
+		<property name="tfsName">
+			<value>TFS_IMAGE</value>
+		</property>
+	</bean>
+
+	<bean id="targetTfsManager" class="com.taobao.common.tfs.DefaultTfsManager" init-method="init">
+		<property name="nsip">
+			<value>10.232.35.32:3100</value>
+		</property>
+	</bean>
+
+	<bean id="parallelRegistrar" class="com.taobao.rseries.RSeriesParallelRegistrar" init-method="init">
+		<property name="typeList">
+			<list>
+				<value>R-JDBC</value>
+				<value>R-TFS</value>
+				<value>R-SEARCH</value>
+			</list>
+		</property>
+		<property name="waitTime" value="5000" />
+	</bean>
+	
+	<bean id="samService" class="com.taobao.hsfunit.app.spring.util.HSFSpringConsumerBean" init-method="init">
+        <property name="interfaceName">
+            <value>com.taobao.top.tim.service.SamService</value>
+        </property>
+        <property name="version">
+            <value>1.1.2.daily</value>
+        </property>
+        <property name="target">
+            <value>10.232.11.58:12200</value>
+        </property>
+    </bean>
+</beans>

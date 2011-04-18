@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="notifySubscriber" class="com.taobao.top.notify.receive.NotifySubscriber">
+		<property name="subscribeHelper" ref="subscribeHelper" />
+		<property name="bizTypes" ref="bizTypes" />
+		<property name="tradeMessages" ref="tradeMessages" />
+		<property name="refundMessages" ref="refundMessages" />
+		<property name="tradePlusMessages" ref="tradePlusMessages" />
+		<property name="itemMessages" ref="itemMessages" />
+	</bean>
+
+	<bean id="subscribeHelper" class="com.taobao.hsf.notify.extend.SubscriptionHelper">
+		<property name="notifyManager" ref="notifyManager" />
+	</bean>
+
+	<bean id="notifyManager" class="com.taobao.hsf.notify.client.NotifyManagerBean" init-method="init">
+		<property name="name" value="TOP" />
+		<property name="description" value="TOP" />
+		<property name="groupId" value="NG-S-TOP-TOPNotifySystem" />
+		<property name="messageListener" ref="notifyListener" />
+	</bean>
+
+	<bean id="notifyListener" class="com.taobao.top.notify.receive.NotifyListener">
+		<property name="itemNotifyBuilder" ref="itemNotifyBuilder" />
+		<property name="refundNotifyBuilder" ref="refundNotifyBuilder" />
+		<property name="tradeNotifyBuilder" ref="tradeNotifyBuilder" />
+		<property name="tradePlusNotifyBuilder" ref="tradePlusNotifyBuilder" />
+		<property name="vasNotifyBuilder" ref="vasNotifyBuilder" />
+		<property name="bizTypes" ref="bizTypes" />
+		<property name="tradeMessages" ref="tradeMessages" />
+		<property name="refundMessages" ref="refundMessages" />
+		<property name="tradePlusMessages" ref="tradePlusMessages" />
+		<property name="itemMessages" ref="itemMessages" />
+		<property name="subscriptionManager" ref="subscriptionManager" />
+		<property name="notifyWriter" ref="notifyWriter" />
+		<property name="alertAgent" ref="alertAgent" />
+		<property name="sender" ref="notifySender" />
+		<property name="runTimeNotifyLogMonitor" ref="runTimeNotifyLogMonitor" />
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+
+	<bean id="itemNotifyBuilder" class="com.taobao.top.notify.receive.builder.ItemNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="refundNotifyBuilder" class="com.taobao.top.notify.receive.builder.RefundNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="tradeNotifyBuilder" class="com.taobao.top.notify.receive.builder.TradeNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="tradePlusNotifyBuilder" class="com.taobao.top.notify.receive.builder.TradePlusNotifyBuilder">
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+	</bean>
+	<bean id="vasNotifyBuilder" class="com.taobao.top.notify.receive.builder.VasNotifyBuilder">
+        <property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor" />
+        <property name="objectMessageConverter" ref="objectMessageConverter" />
+        <property name="packetMessageConverter" ref="packetMessageConverter" />
+        <property name="savingNick" value="${vas.saving.nick}" />
+        <property name="savingUserId" value="${vas.saving.userid}" />
+    </bean>
+    
+    <bean id="objectMessageConverter" class="com.taobao.top.notify.receive.builder.ObjectMessageConverter" />
+    <bean id="packetMessageConverter" class="com.taobao.top.notify.receive.builder.PacketMessageConverter" />
+	
+	<bean id="bizTypes" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<value>100</value>
+				<value>200</value>
+				<value>300</value>
+				<value>500</value>
+				<value>600</value>
+				<value>610</value>
+				<value>620</value>
+				<value>630</value>
+				<value>650</value>
+				<value>700</value>
+				<value>800</value>
+				<value>900</value>
+				<!-- open search -->
+				<value>1000</value>
+				<value>1001</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="tradeMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 创建交易 -->
+				<entry key="-trade-enable-order-done">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CREATE" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 修改交易费用 -->
+				<entry key="-trade-modify-fee-done">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_MODIFY_FEE" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 关闭或修改子订单 -->
+				<entry key="-close-and-modify-detail-order">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CLOSE_AND_MODIFY_DETAIL_ORDER" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 关闭交易 -->
+				<entry key="-trade-closed">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CLOSE" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 买家付款 -->
+				<entry key="-trade-paid-done">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_BUYER_PAY" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 卖家发货 -->
+				<entry key="-trade-shipped-done">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_SELLER_SHIP" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 延长收货时间 -->
+				<entry key="-trade-delay-comfirmpaid-done">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_DELAY_CONFIRM_PAY" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 子订单退款成功 -->
+				<entry key="-trade-part-refund">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_PARTLY_REFUND" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 子订单打款成功 -->
+				<entry key="-trade-part-confirm">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_PARTLY_CONFIRM_PAY" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 子订单打款成功 -->
+				<entry key="-batch-trade-part-confirm">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_PARTLY_CONFIRM_PAY" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 交易成功 -->
+				<entry key="-trade-success">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_SUCCESS" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 交易超时提醒 -->
+				<entry key="tc-timeout-remind">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_TIMEOUT_REMIND" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="tradePlusMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 交易评价变更 -->
+				<entry key="-trade-rated">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_RATED" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 交易备注修改 -->
+				<entry key="-tradememo-modified">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_MEMO_MODIFIED" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 修改交易收货地址 -->
+				<entry key="-logsitics-address-changed">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_LOGISTICS_ADDRESS_CHANGED" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+
+				<!-- 修改订单信息（SKU等） -->
+				<entry key="-attributes-changed">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="TRADE_CHANGED" />
+						<property name="bizTypeAble" value="true" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="refundMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 退款创建 -->
+				<entry key="tc-refund-created">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_CREATED" />
+					</bean>
+				</entry>
+
+				<!-- 退款关闭 -->
+				<entry key="tc-refund-closed">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_CLOSED" />
+					</bean>
+				</entry>
+
+				<!-- 退款成功 -->
+				<entry key="tc-refund-success">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_SUCCESS" />
+					</bean>
+				</entry>
+
+				<!-- 卖家同意退款协议 -->
+				<entry key="tc-refund-seller-agree-agreement">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_SELLER_AGREE_AGREEMENT" />
+					</bean>
+				</entry>
+
+				<!-- 卖家拒绝退款协议 -->
+				<entry key="tc-refund-seller-refuse-agreement">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_SELLER_REFUSE_AGREEMENT" />
+					</bean>
+				</entry>
+
+				<!-- 买家修改退款协议 -->
+				<entry key="tc-refund-buyer-moidfied-agreement">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_BUYER_MODIFIY_AGREEMENT" />
+					</bean>
+				</entry>
+
+				<!-- 买家退货给卖家 -->
+				<entry key="tc-refund-buyer-return-goods">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_BUYER_RETURN_GOODS" />
+					</bean>
+				</entry>
+
+				<!-- 发表留言 -->
+				<entry key="tc-refund-create-message">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_CREATE_MESSAGE" />
+					</bean>
+				</entry>
+
+				<!-- 屏蔽留言 -->
+				<!-- <entry key="tc-refund-block-message">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_BLOCK_MESSAGE" />
+					</bean>
+				</entry> -->
+
+				<!-- 退款超时提醒 -->
+				<entry key="tc-refund-timeout-remind">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="REFUND_TIMEOUT_REMIND" />
+					</bean>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="itemMessages" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- 新增商品 -->
+				<entry key="NM-item-add">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="ITEM_ADD" />
+					</bean>
+				</entry>
+
+				<!-- 上架商品 -->
+				<entry key="NM-item-upshelf">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="ITEM_UPSHELF" />
+					</bean>
+				</entry>
+
+				<!-- 下架商品 -->
+				<entry key="NM-item-downshelf">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="ITEM_DOWNSHELF" />
+					</bean>
+				</entry>
+
+				<!-- 删除商品 -->
+				<entry key="NM-item-del">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="ITEM_DELETE" />
+					</bean>
+				</entry>
+
+				<!-- 更新商品 -->
+				<entry key="NM-item-edit">
+					<bean class="com.taobao.top.notify.domain.SubscriberNode">
+						<property name="statusName" value="ITEM_UPDATE" />
+					</bean>
+				</entry>
+
+				<!-- 商品卖空 -->
+                <entry key="NM-item-zeroquantity">
+                    <bean class="com.taobao.top.notify.domain.SubscriberNode">
+                        <property name="statusName" value="ITEM_ZERO_STOCK" />
+                    </bean>
+                </entry>
+
+                <!-- 小二删除商品 -->
+                <entry key="NM-item-punish-del">
+                    <bean class="com.taobao.top.notify.domain.SubscriberNode">
+                        <property name="statusName" value="ITEM_PUNISH_DELETE" />
+                    </bean>
+                </entry>
+
+				<!-- 商品部分属性变化（目前没有消息发出来，暂不接收） -->
+<!--				<entry key="NM-item-feature-change">-->
+<!--					<bean class="com.taobao.top.notify.domain.SubscriberNode">-->
+<!--						<property name="statusName" value="ITEM_FEATURE_CHANGE" />-->
+<!--					</bean>-->
+<!--				</entry>-->
+
+				<!-- 取消橱窗推荐商品,在商品变化消息中，独立给予option的第7位 -->
+
+				<!-- 橱窗推荐商品,在商品变化消息中，独立给予option的第8位 -->
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="vasMessages" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <!-- 淘宝增值服务扣款成功 -->
+                <entry key="NM-Rate-Billing-success">
+                    <bean class="com.taobao.top.notify.domain.SubscriberNode">
+                        <property name="statusName" value="VAS_BILLING_SUCCESS" />
+                    </bean>
+                </entry>
+
+                <!-- 淘宝增值服务开通 -->
+                <entry key="service-open">
+                    <bean class="com.taobao.top.notify.domain.SubscriberNode">
+                        <property name="statusName" value="VAS_SERVICE_OPEN" />
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+</beans>

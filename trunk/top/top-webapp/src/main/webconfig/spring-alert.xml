@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="alertAgent" class="com.taobao.monitor.alert.client.AlertAgentImpl"
+		init-method="init">
+		<property name="alertSender" ref="alertSender" />
+		<property name="ruleFactory" ref="alertRuleFactory" />
+	</bean>
+	<bean id="alertSender" class="com.taobao.monitor.alert.client.nagios.NagiosSender">
+	</bean>
+	<bean id="alertRuleFactory"
+		class="com.taobao.monitor.alert.client.nagios.NagiosAlertRuleFactory"
+		init-method="init">
+		<property name="defaultSlowDownThreshold" value="100" />
+		<property name="defaultDismissDelaySeconds" value="180" />
+		<property name="defaultAutoDismissDelaySeconds" value="900" />
+	</bean>
+</beans>

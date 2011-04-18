@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task name = "taobao.topats.trades.price.update2">
+    <!-- 前置校验hsf服务配置 -->
+    <pre_check type="hsf" interface="com.taobao.api.trade.TradeService" method="doCheckCertInfo" version="1.0.0" />
+    <!-- 子任务hsf服务配置 -->
+    <sub_task type="hsf" interface="com.taobao.api.trade.TradeService" method="doTradePriceUpdate" version="1.0.0" />
+    <!-- 入参校验规则 -->
+    <params min_size="1" max_size="40">
+        <param name="tids" target_name="tid" enable_split="true" separator=";" target_enable_null="false" target_type="number" />
+        <param name="oids" target_name="oids" enable_split="true" separator=";" target_enable_null="false" target_type="list" />
+        <param name="adjust_fees" target_name="adjust_fees" enable_split="true" separator=";" target_enable_null="false" target_type="string" />
+        <param name="logistics_fees" target_name="logistics_fee" enable_split="true" separator=";" target_enable_null="true" target_type="price" />
+        <param name="origin_fees" target_name="origin_fees" enable_split="true" separator=";" target_enable_null="false" target_type="string" />
+        <param name="nick" target_name="nick" />
+        <param name="cert_sign" target_name="cert_sign" enable_split="false" target_enable_null="true" target_type="string" for_check="true" />
+    </params>
+    <!-- 忽略掉的错误码，作为成功处理 -->
+    <ignore_fails>123456,223456</ignore_fails>
+    <!-- 需要重试的错误码，标记重试 -->
+    <retry_fails>isp.trade-service-unavailable,isp.remote-service-error,isp.remote-service-timeout,isp.remote-connection-error</retry_fails>
+    <!-- 返回给用户的子任务入参字段 -->
+    <send_out_requests>tid,oids,adjust_fees,logistics_fee,origin_fees</send_out_requests>
+    
+</task>
+
+

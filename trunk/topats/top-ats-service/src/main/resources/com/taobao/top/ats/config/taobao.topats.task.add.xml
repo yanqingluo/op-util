@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<method>
+	<methodCall name="addTask" apiName="taobao.topats.task.add">
+		<params>
+			<param>
+				<type>
+					<struct />
+				</type>
+			</param>
+		</params>
+	</methodCall>
+	<methodResponse>
+		<param exceptionExpress="error=true,errorCode,errorMsg">
+			<type>
+				<struct>
+					<member name="result" apiName="task">
+						<type>
+							<struct>
+								<member name="id" apiName="task_id" apiType="java.lang.Long" />
+								<member name="gmtCreated" apiName="created" apiType="string" />
+							</struct>
+						</type>
+					</member>
+				</struct>
+			</type>
+		</param>
+	</methodResponse>
+</method>

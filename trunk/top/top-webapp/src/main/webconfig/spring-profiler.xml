@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="cacheStatInterceptor"
+		class="com.taobao.top.common.diagnostic.aop.CacheStatInterceptor" />
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>sessionCacheClient,commonCacheClient</value>
+		</property>
+		<property name="proxyTargetClass" value="true" />
+		<property name="interceptorNames">
+			<list>
+				<value>cacheStatInterceptor</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="cacheClientInterceptor" class="com.taobao.top.common.cache.aop.CacheClientInterceptor">
+		<property name="alertAgent" ref="alertAgent" />
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>sessionCacheClient,commonCacheClient,blacklistCacheClient</value>
+		</property>
+		<property name="proxyTargetClass" value="true" />
+		<property name="interceptorNames">
+			<list>
+				<value>cacheClientInterceptor</value>
+			</list>
+		</property>
+	</bean>
+</beans>

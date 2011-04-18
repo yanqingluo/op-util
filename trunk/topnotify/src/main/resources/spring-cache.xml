@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="subscriptionManager" class="com.taobao.top.notify.cache.impl.SubscriptionManagerImpl">
+		<property name="samService" ref="samService" />
+	</bean>
+
+	<import resource="classpath:tim-rich-client-config.xml" />
+
+	<bean id="configService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean" init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.ConfigService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.service.version}</value>
+		</property>
+		<property name="methodSpecials">
+			<list>
+				<bean class="com.taobao.hsf.model.metadata.MethodSpecial">
+					<property name="methodName" value="getAllAuthorizeUserIds" />
+					<property name="clientTimeout" value="80000" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="samServiceClient" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean" init-method="init">
+		<property name="interfaceName">
+			<value>com.taobao.top.tim.service.SamService</value>
+		</property>
+		<property name="version">
+			<value>${top.tim.service.version}</value>
+		</property>
+	</bean>
+
+
+	<bean id="clientConfigBean" class="com.taobao.top.tim.client.config.ClientConfigBean">
+		<property name="localServiceEnable" value="true" />
+		<property name="localCahceEnable" value="true" />
+		<property name="whiteListServiceEnable" value="true" />
+		<property name="incSyncTaskInitialDelay" value="60" />
+		<property name="incSyncTaskPeriod" value="60" />
+		<property name="refreshBloomFilterMapSize" value="10000" />
+		<property name="localCacheSize" value="1048576" />
+		<property name="localCacheInterval" value="600000" />
+		<property name="logFlushInterval" value="1000" />
+		<property name="whiteListLoadRetries" value="25" />
+	</bean>
+
+	<bean id="authUserWhiteListSyncTask" class="com.taobao.top.tim.client.sync.AuthUserWhiteListSyncTask">
+		<property name="authUserWhiteListService" ref="authUserWhiteListService" />
+		<property name="clientConfigBean" ref="clientConfigBean" />
+	</bean>
+
+	<bean id="appkeyWhiteListSyncTask" class="com.taobao.top.tim.client.sync.AppkeyWhiteListSyncTask">
+		<property name="appkeyWhiteListService" ref="appkeyWhiteListService" />
+		<property name="clientConfigBean" ref="clientConfigBean" />
+	</bean>
+
+	<bean id="clientTairManager" class="com.taobao.common.tair.impl.DefaultTairManager" init-method="init">
+		<property name="configServerList">
+			<list>
+				<value>${top.rc.cache.common.loc}</value>
+			</list>
+		</property>
+		<property name="groupName" value="${top.rc.cache.common.group}" />
+	</bean>
+
+</beans>

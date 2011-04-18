@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="tddl_root" class="com.taobao.tddl.rule.bean.TDDLRoot">
+		<property name="logicTableMap">
+			<map>
+				<entry key="top_notify" value-ref="top_notify" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="top_notify" class="com.taobao.tddl.rule.bean.SimpleLogicTable">
+		<property name="logicTableName" value="top_notify" />
+		<property name="databases" value="TNDB_1,TNDB_2,TNDB_3,TNDB_4" />
+		<property name="from" value="1" />
+		<property name="to" value="7" />
+		<property name="databaseRuleStringList" value="#user_id# % 4" />
+		<property name="tableRuleStringList" value="dayofweek(#gmt_modified,1,7#)" />
+	</bean>
+</beans>

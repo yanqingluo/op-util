@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<error_rsp>
+	<args>
+		<arg name="nick">alin</arg>
+		<arg name="email">xalinx@gmail.com</arg>
+		<arg name="sum">13</arg>
+		<arg name="sign">
+		<![CDATA[
+			xergi5j385jh23jjhrkjht56ytu87ry5
+		]]>
+		</arg>
+	</args>
+	<code>10</code>
+	<msg>Service current unavailable</msg>
+</error_rsp>

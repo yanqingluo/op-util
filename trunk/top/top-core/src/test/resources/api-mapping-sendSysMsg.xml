@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<method interfaceName="com.taobao.matrix.mc.client.SystemMessageService" interfaceVersion="1.0.0.api">
+	<methodCall name="sendOuterMessageFromSystem" apiName="taobao.sns.message.sendSysMsg">
+		<params>
+			<param type="long" apiName="to_id" />
+			<param type="string" apiName="content" />
+		</params>
+	</methodCall>
+	<methodResponse>
+		<param apiName="msg" apiType="string" />
+	</methodResponse>
+</method>

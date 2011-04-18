@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="notifySender" class="com.taobao.top.notify.send.impl.NotifySenderImpl" init-method="init">
+		<property name="service" ref="topMQService"></property>
+		<property name="runTimeMessageLogMonitor" ref="runTimeMessageLogMonitor"></property>
+		<property name="topNotifyExceptionLogMonitor" ref="topNotifyExceptionLogMonitor"></property>
+	</bean>
+
+	<bean id="topMQService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+      init-method="init">
+	     <property name="interfaceName">
+	         <value>com.taobao.top.mq.TopMQService</value>
+	     </property>
+	     <property name="version">
+	         <value>${top.mq.service.version}</value>
+	     </property>
+    </bean>
+</beans>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!--并行注册工具类-->
+	<bean id="parallelRegistrar" class="com.taobao.rseries.RSeriesParallelRegistrar"
+		init-method="init">
+		<property name="typeList">
+			<list>
+				<value>R-TFS</value>
+			</list>
+		</property>
+		<property name="waitTime" value="5000"/>
+		<property name="useCache" value="false" />
+	</bean>    
+</beans>

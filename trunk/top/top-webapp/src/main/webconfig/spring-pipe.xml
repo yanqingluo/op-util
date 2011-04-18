@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>	
+	<bean id="errorCodeTransform" class="com.taobao.top.core.ErrorCodeTransform">
+		<property name="samService" ref="localCachedTIMService"/>
+	</bean>
+	<bean id="abstractTopPipeManager" 
+		class="com.taobao.top.core.framework.AbstractTopPipeManager"
+		abstract="true" init-method="init">
+		<property name="asynLogWriter" ref="asynLogWriter"/>
+	</bean>
+
+	<bean id="topPipeManager" 
+		class="com.taobao.top.core.framework.TopPipeManager"
+		parent="abstractTopPipeManager">
+	</bean>
+	
+	<bean id="newApiRestHandler" class="com.taobao.top.web.NewApiRestHandler" init-method="init">
+		<property name="pipeList">
+			<list>
+				<ref bean="protocolMustParamNullCheckPipe"/>
+				<ref bean="protocolMustParamCheckPipe"/>
+				<ref bean="protocolOptParamCheckPipe"/>
+				<ref bean="newFlowControlPipe"/>
+				<ref bean="serviceMustParamCheckPipe"/>
+				<ref bean="otherCheckPipe"/>
+				<ref bean="serviceOptParamCheckPipe"/>				
+				<ref bean="executePipe"/>
+				<ref bean="resultExporterPipe"/>
+				<ref bean="logPipe"/>
+			</list>
+		</property>
+		<property name="topPipeManager" ref="topPipeManager"/>
+		<property name="tadgetManager" ref="tadgetManager"/>	
+	</bean>
+	
+	<!-- 负责新旧Handler的切换 -->
+	<bean id="processSelectHandler" class="com.taobao.top.web.ProcessSelectHandler">
+		<property name="newPageApiRestHandler" ref="newPageApiRestHandler"/>	
+		<property name="newPageApiUrlRequestHandler" ref="newPageApiURLRequestHandler"/>
+	</bean>
+	
+	<bean id="protocolMustParamNullCheckPipe" class="com.taobao.top.core.framework.pipe.ProtocolMustParamNullCheckPipe">
+		<property name="pipeName" value="protocolMustParamNullCheckPipe"/>
+	</bean>
+
+	<bean id="protocolMustParamCheckPipe" class="com.taobao.top.core.framework.pipe.ProtocolMustParamCheckPipe">
+		<property name="apiFactory" ref="apiFactory"/>
+		<property name="forcePost" value="${top.api.forceLimit}"/>
+		<property name="tadgetManager" ref="tadgetManager"/>
+		<property name="sandbox" value="${top.current.env.sandbox}"/>
+		<property name="pipeName" value="protocolMustParamCheckPipe"/>
+	</bean>
+	<!--  重放攻击管道 -->
+	<bean id="replayAttackPipe" class="com.taobao.top.core.framework.pipe.ReplayAttackPipe">
+		<property name="pipeName" value="replayAttackPipe"/>
+		<property name="cache" ref="replayAttackLocalCache"/>
+		<property name="tadgetManager" ref="tadgetManager"/>
+	</bean>
+	<bean id="replayAttackLocalCache" class="com.taobao.top.common.cache.aop.ReplayAttackLocalCacheImpl">
+	</bean>
+
+	<bean id="protocolOptParamCheckPipe" class="com.taobao.top.core.framework.pipe.ProtocolOptParamCheckPipe">
+		<property name="whiteListManager" ref="whiteListManager"/>
+		<property name="sessionManager" ref="topSessionManager"/>
+		<property name="pipeName" value="protocolOptParamCheckPipe"/>
+	</bean>
+	
+
+	<bean id="newFlowControlPipe" class="com.taobao.top.core.framework.pipe.NewFlowControlPipe">
+		<property name="tadgetManager" ref="tadgetManager" />
+		<property name="flowGuard" ref="flowGuard" />
+		<property name="callRecorder" ref="syncCallRecorder" />
+		<property name="flowRulesConstructor" ref="flowRulesConstructor" />
+		<property name="forceLimit" value="${top.api.forceLimit}"/>
+		<property name="pipeName" value="newFlowControlPipe"/>
+	</bean>
+	<!-- ============================ -->
+	
+	
+	<bean id="serviceMustParamCheckPipe" class="com.taobao.top.core.framework.pipe.ServiceMustParamCheckPipe">
+		<property name="pipeName" value="serviceMustParamCheckPipe"/>
+	</bean>
+
+	<bean id="otherCheckPipe" class="com.taobao.top.core.framework.pipe.OtherCheckPipe">
+		<property name="pipeName" value="otherCheckPipe"/>
+	</bean>
+
+	<bean id="serviceOptParamCheckPipe" class="com.taobao.top.core.framework.pipe.ServiceOptParamCheckPipe">
+		<property name="pipeName" value="serviceOptParamCheckPipe"/>
+	</bean>
+
+	<bean id="executePipe" class="com.taobao.top.core.framework.pipe.ExecutePipe">
+		<property name="apiExecutor" ref="apiExecutor"/>
+		<property name="pipeName" value="executePipe"/>
+		<property name="asynMode" value="true"/>
+	</bean>
+
+	<bean id="resultExporterPipe" class="com.taobao.top.core.framework.pipe.ResultExporterPipe">
+		<property name="apiExporter" ref="apiExporter"/>
+		<property name="pipeName" value="resultExporterPipe"/>
+	</bean>	
+
+	<bean id="logPipe" class="com.taobao.top.core.framework.pipe.LogPipe">
+		<property name="pipeName" value="logPipe"/>
+		<property name="errorCodeTransform" ref="errorCodeTransform"/>
+	</bean>
+	<bean id="pageLogPipe" class="com.taobao.top.pageapi.framework.PageLogPipe">
+		<property name="pipeName" value="pageLogPipe"/>
+		<property name="errorCodeTransform" ref="errorCodeTransform"/>
+	</bean>
+	
+	<!-- 备选管道 -->
+	<!-- 本地黑名单的管道 -->
+	<bean id="localBlackListPipe" class="com.taobao.top.core.framework.pipe.LocalBlackListPipe">
+		<property name="pipeName" value="localBlackListPipe"/>
+	</bean>
+	<!-- 峰值监控管道 -->
+	<bean id="peakValueMonitorPipe" class="com.taobao.top.core.framework.pipe.PeakValueMonitorPipe">
+		<property name="peakValueMonitor" ref="peakValueMonitor"/>
+		<property name="pipeName" value="peakValueMonitorPipe"/>
+	</bean>
+	<bean id="peakValueMonitor" class="com.taobao.top.common.PeakValueMonitor"/>
+	<!-- ISP打点控制器 -->
+	<bean id="ispDebugController" class="com.taobao.top.core.DebugController"/>
+	
+	<!-- ====================================以下是页面流程用到的管道================================================== -->
+	<!-- 对应的PageApiRestHandler -->
+	
+	<bean id="pagePipeManager" 
+		class="com.taobao.top.pageapi.framework.TopPagePipeManager"
+		parent="abstractTopPipeManager">
+	</bean>
+		
+	<bean id="newPageApiRestHandler" class="com.taobao.top.web.NewApiRestHandler" init-method="init">
+		<property name="pipeList">
+			<list>			
+				<ref bean="protocolMustParamNullCheckPipe"/>
+				<ref bean="protocolMustParamCheckPipe"/>
+				<ref bean="cookieCheckPipe"/>
+				<ref bean="protocolOptParamCheckPipe"/>
+				<ref bean="newFlowControlPipe"/>
+				<ref bean="serviceMustParamCheckPipe"/>
+				<ref bean="otherCheckPipe"/>
+				<ref bean="serviceOptParamCheckPipe"/>
+				<ref bean="pageApiExecutePipe"/>
+				<ref bean="pageApiAfterCheckPipe"/>				
+				<ref bean="pageApiResultExporterPipe"/>
+				<ref bean="pageLogPipe"/>
+			</list>
+		</property>
+		<property name="topPipeManager" ref="pagePipeManager"/>
+		<property name="tadgetManager" ref="tadgetManager"/>	
+	</bean>	
+	<!-- 对应的PageApiURLRequestHandler -->
+	<bean id="pageApiUrlPipeManager" 
+		class="com.taobao.top.pageapi.framework.TopPagePipeManager"
+		parent="abstractTopPipeManager">
+	</bean>
+	<bean id="newPageApiURLRequestHandler" class="com.taobao.top.web.NewApiRestHandler" init-method="init">
+		<property name="pipeList">
+			<list>
+				<ref bean="pageApiUrlCheckPipe"/>
+				<ref bean="pageApiRedirectPipe"/>
+			</list>
+		</property>
+		<property name="topPipeManager" ref="pageApiUrlPipeManager"/>
+		<property name="tadgetManager" ref="tadgetManager"/>	
+	</bean>
+	<!-- 第一个管道，检查cookie -->
+	<bean id="cookieCheckPipe" class="com.taobao.top.pageapi.framework.CookieCheckPipe">
+		<property name="pipeName" value="cookieCheckPipe"/>
+	</bean>
+	<!-- 执行业务逻辑管道 -->
+	<bean id="pageApiExecutePipe" class="com.taobao.top.pageapi.framework.PageApiExecutePipe">
+		<property name="pipeName" value="pageApiExecutePipe"/>
+		<property name="apiExecutor" ref="pageApiExecutor"/>
+		<property name="URLSignKey" value="${top.shopex.encrypter.key}"/>
+		<property name="whiteListDomainService" ref="whiteListDomainService" />
+		<!--property name="paywaySignCheckUtil" ref="paywaySignCheckUtil" /-->
+	</bean>
+	<!-- 执行完业务逻辑后的处理管道 -->
+	<bean id="pageApiAfterCheckPipe" class="com.taobao.top.pageapi.framework.PageApiAfterCheckPipe">
+		<property name="pipeName" value="pageApiAfterCheckPipe"/>
+	</bean>
+	<!-- 执行结果输出管道 -->
+	<bean id="pageApiResultExporterPipe" class="com.taobao.top.pageapi.framework.PageApiResultExporterPipe">
+		<property name="apiExporter" ref="pageApiExporter"/>
+		<property name="pipeName" value="pageApiResultExporterPipe"/>
+	</bean>
+	<bean id="pageApiUrlCheckPipe" class="com.taobao.top.pageapi.framework.PageApiUrlCheckPipe">
+		<property name="pipeName" value="pageApiUrlCheckPipe"/>
+	</bean>
+	<!-- 直接跳转管道 -->
+	<bean id="pageApiRedirectPipe" class="com.taobao.top.pageapi.framework.PageApiRedirectPipe">
+		<property name="top_sign_key" value="${top.tm.encrypter.key}"/>
+		<property name="URLSignKey" value="${top.shopex.encrypter.key}"/>
+		<property name="tbServiceFactory" ref="serviceFactory"/>
+		<property name="pipeName" value="pageApiRedirectPipe"/>
+		<property name="whiteListDomainService" ref="whiteListDomainService" />
+		<!--property name="paywaySignCheckUtil" ref="paywaySignCheckUtil" /-->
+	</bean>
+</beans>

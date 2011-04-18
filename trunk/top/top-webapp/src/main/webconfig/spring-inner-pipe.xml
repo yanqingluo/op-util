@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- cache -->
+	<bean id="apiCache" class="com.taobao.console.ApiCacheOpt">
+		<property name="dynamicApiFactory" ref="apiFactory" />
+		<property name="openUpdateDefineConfig" value="${top.allowupdate.apidefine}"/>
+	</bean>
+	<bean id="sessionCache" class="com.taobao.console.SessionCacheOpt">
+		<property name="tadgetManager" ref="tadgetManager" />
+		<property name="sessionGenerator" ref="sessionGenerator"/>
+		<property name="uicReadServiceClient" ref="uicReadServiceClient" />
+	</bean>
+	<bean id="blackListCache" class="com.taobao.console.BlackListCacheOpt">
+		<property name="cacheClients">
+			<list>
+				<ref bean="blacklistCacheClient"/>
+				<ref bean="counterCacheClient"/>
+				<ref bean="commonCacheClient"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="otherCache" class="com.taobao.console.OtherCacheOpt">
+		<property name="tadgetManager" ref="tadgetManager" />
+	</bean>
+	<bean id="cacheOperationPipe" class="com.taobao.console.CacheOperationPipe">
+		<property name="sessionCache" ref="sessionCache"/>
+		<property name="blackListCache" ref="blackListCache"/>
+		<property name="apiCache" ref="apiCache"/>
+		<property name="otherCache" ref="otherCache"/>
+	</bean>
+	<bean id="peakPipe" class="com.taobao.console.PeakPipe">
+		<property name="pipeName" value="peakPipe" />
+		<property name="peakValueMonitor" ref="peakValueMonitor" />
+	</bean>
+	
+	<bean id="consoleClientHandler"
+		class="com.taobao.top.console.client.handler.ConsoleClientHandler"
+		init-method="init">
+	
+		<property name="consoleClientPipeList">
+			<list>
+				<ref bean="richClientConfigPipe"/>
+				<ref bean="cacheOperationPipe" />
+				<ref bean="peakPipe" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="topPipeConfigManager" class="com.taobao.top.common.TopPipeConfigManager"/>
+</beans>

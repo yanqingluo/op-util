@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="${top-webapp.aid}">
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/${top-core.aid}/${top-core.aid}">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/${top-utility.aid}/${top-utility.aid}">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/${top-sm.aid}/${top-sm.aid}">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/${top-pageapi.aid}/${top-pageapi.aid}">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="top-webapp"/>
+        <property name="java-output-path" value="/${top-webapp.aid}/target/classes"/>
+    </wb-module>
+</project-modules>
